@@ -1,4 +1,4 @@
-# CampusMap
+# mapMyCampus
 
 Interactive campus navigation and discovery platform for college students.
 
