@@ -1,0 +1,1 @@
+ALTER TABLE location_requests ALTER COLUMN slug DROP NOT NULL;
