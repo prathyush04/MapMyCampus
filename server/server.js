@@ -25,6 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(rateLimiter);
 app.use('/uploads', express.static('uploads'));
+app.get('/healthz', (req, res) => res.send('OK'));
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 app.use('/api/auth',          require('./routes/auth'));
