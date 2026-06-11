@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
-import { getNotifications, markAllRead } from '../api';
+import { getNotifications, markAllNotificationsRead as markAllRead } from '../api';
 
 export function useNotifications() {
   const { user } = useAuth();
