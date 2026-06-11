@@ -303,9 +303,14 @@ function LocationRequestCard({ request: r, status, onReview, graphNodes }) {
           ))}
           <div>
             <label className="block text-xs font-medium mb-0.5">Category</label>
-            <select value={edits.category} onChange={(e) => setEdits((f) => ({...f,category:e.target.value}))}
-              className="w-full border rounded px-2 py-1 text-xs">
-              {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            <select
+              value={edits.category}
+              onChange={(e) => setEdits((f) => ({ ...f, category: e.target.value }))}
+              className="w-full border rounded p-1"
+            >
+              {['food', 'academic', 'sports', 'admin', 'medical', 'facility', 'hostel', 'other'].map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
             </select>
           </div>
           <div>

@@ -11,7 +11,7 @@ import { CATEGORY_ICON_COLOR, makeIcon } from '../utils/mapIcons';
 const CENTER = [22.288522625548808, 73.36403846740724];
 const NEARBY_THRESHOLD_M = 30;
 const STEP_ARRIVAL_M = 15; // metres to consider a waypoint reached
-const CATEGORIES = ['food','academic','sports','admin','medical','facility','other'];
+const CATEGORIES = ['food','academic','sports','admin','medical','facility','hostel','other'];
 
 function bearing(from, to) {
   const dLng = (to[1] - from[1]) * Math.PI / 180;
@@ -686,7 +686,7 @@ export default function MapPage() {
             <div>
               <label className="block text-xs font-medium mb-0.5">Category</label>
               <select value={suggestForm.category} onChange={(e) => setSuggestForm((f) => ({ ...f, category: e.target.value }))}
-                className="w-full border rounded px-2 py-1 text-sm">
+                className="w-full border-gray-300 rounded p-1.5 text-sm border focus:ring-campus-blue">
                 {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
