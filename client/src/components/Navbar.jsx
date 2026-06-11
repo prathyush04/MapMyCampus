@@ -38,13 +38,15 @@ export default function Navbar() {
             </>
           )}
         </div>
-        {/* Mobile: hamburger + notifications for admin */}
-        <div className="flex sm:hidden items-center gap-3">
-          <NotificationsDropdown />
-          <button onClick={() => setMenuOpen((o) => !o)} className="text-white text-xl leading-none">
-            {menuOpen ? '✕' : '☰'}
-          </button>
-        </div>
+        {/* Mobile: hamburger + notifications for non-guests */}
+        {user && !user.email?.startsWith('guest_') && (
+          <div className="flex sm:hidden items-center gap-3">
+            <NotificationsDropdown />
+            <button onClick={() => setMenuOpen((o) => !o)} className="text-white text-xl leading-none">
+              {menuOpen ? '✕' : '☰'}
+            </button>
+          </div>
+        )}
       </div>
       {menuOpen && (
         <div className="sm:hidden bg-campus-blue border-t border-blue-700 px-4 pb-3 flex flex-col gap-3">
