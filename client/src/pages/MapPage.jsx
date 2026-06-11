@@ -11,7 +11,7 @@ import { CATEGORY_ICON_COLOR, makeIcon } from '../utils/mapIcons';
 const CENTER = [22.288522625548808, 73.36403846740724];
 const NEARBY_THRESHOLD_M = 30;
 const STEP_ARRIVAL_M = 15; // metres to consider a waypoint reached
-const CATEGORIES = ['food','academic','sports','admin','medical','facility','hostel','other'];
+const CATEGORIES = ['food', 'academic', 'sports', 'admin', 'medical', 'facility', 'hostel', 'gates', 'parking', 'other'];
 
 function bearing(from, to) {
   const dLng = (to[1] - from[1]) * Math.PI / 180;
@@ -335,10 +335,10 @@ export default function MapPage() {
             className="w-full border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-campus-blue"
           />
           <div className="flex flex-wrap gap-1 mt-2">
-            {CATEGORIES.map((c) => (
-              <button key={c} onClick={() => setActiveCategory(activeCategory === c ? null : c)}
+            {['all', ...CATEGORIES].map((c) => (
+              <button key={c} onClick={() => setActiveCategory(activeCategory === c || c === 'all' ? null : c)}
                 className={`text-xs px-2 py-0.5 rounded-full border capitalize transition ${
-                  activeCategory === c ? 'bg-campus-blue text-white border-campus-blue' : 'text-gray-600 border-gray-300 hover:border-campus-blue'
+                  (activeCategory === c || (c === 'all' && !activeCategory)) ? 'bg-campus-blue text-white border-campus-blue' : 'text-gray-600 border-gray-300 hover:border-campus-blue'
                 }`}>{c}</button>
             ))}
           </div>
@@ -396,7 +396,6 @@ export default function MapPage() {
             className={`w-full text-sm py-1.5 rounded border transition ${suggestMode ? 'bg-blue-50 border-campus-blue text-campus-blue' : 'border-gray-300 text-gray-600 hover:border-campus-blue'}`}>
             {suggestMode ? '✕ Cancel suggestion' : '📍 Suggest a location'}
           </button>
-          {/* Shortcut feature hidden as requested */}
         </div>
       </aside>
 
@@ -687,7 +686,9 @@ export default function MapPage() {
               <label className="block text-xs font-medium mb-0.5">Category</label>
               <select value={suggestForm.category} onChange={(e) => setSuggestForm((f) => ({ ...f, category: e.target.value }))}
                 className="w-full border-gray-300 rounded p-1.5 text-sm border focus:ring-campus-blue">
-                {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                {CATEGORIES.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
               </select>
             </div>
             <div>

@@ -4,8 +4,9 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejec
 
 (async () => {
   try {
-    await pool.query(`ALTER TYPE location_category ADD VALUE IF NOT EXISTS 'hostel'`);
-    console.log('Added hostel to location_category');
+    await pool.query(`ALTER TYPE location_category ADD VALUE IF NOT EXISTS 'gates'`);
+    await pool.query(`ALTER TYPE location_category ADD VALUE IF NOT EXISTS 'parking'`);
+    console.log('Added gates and parking to location_category');
   } catch (e) {
     console.error(e);
   } finally {

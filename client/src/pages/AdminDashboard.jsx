@@ -11,7 +11,7 @@ import CategoryBadge from '../components/CategoryBadge';
 import { useSocket } from '../context/SocketContext';
 
 const CENTER = [22.288522625548808, 73.36403846740724];
-const CATEGORIES = ['food','academic','sports','admin','medical','facility','other'];
+const CATEGORIES = ['food','academic','sports','admin','medical','facility','hostel','gates','parking','other'];
 
 // ─── Map editor sub-component ─────────────────────────────────────────────────
 function MapEditor({ graph, locations, onNodePlaced, onEdgePlaced, onDeleteEdge, onDeleteNode, placingLocation, onLocationPlaced }) {
@@ -307,12 +307,12 @@ function LocationRequestCard({ request: r, status, onReview, graphNodes }) {
           ))}
           <div>
             <label className="block text-xs font-medium mb-0.5">Category</label>
-            <select
+              <select
               value={edits.category}
               onChange={(e) => setEdits((f) => ({ ...f, category: e.target.value }))}
               className="w-full border rounded p-1"
             >
-              {['food', 'academic', 'sports', 'admin', 'medical', 'facility', 'hostel', 'other'].map((c) => (
+              {['food', 'academic', 'sports', 'admin', 'medical', 'facility', 'hostel', 'gates', 'parking', 'other'].map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
