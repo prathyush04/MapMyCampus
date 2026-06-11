@@ -43,7 +43,7 @@ exports.getRoute = async (req, res) => {
     [result.path]
   );
   const nodeMap = Object.fromEntries(nodes.map((n) => [n.id, n]));
-  const enriched = { ...result, totalDistance: result.distance, coordinates: result.path.map((id) => nodeMap[id]) };
+  const enriched = { ...result, coordinates: result.path.map((id) => nodeMap[id]) };
 
   await cache.set(cacheKey, JSON.stringify(enriched), 'EX', 86400);
   res.json(enriched);
