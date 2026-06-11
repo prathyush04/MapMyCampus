@@ -14,9 +14,10 @@ const CENTER = [22.288522625548808, 73.36403846740724];
 const CATEGORIES = ['food','academic','sports','admin','medical','facility','other'];
 
 // ─── Map editor sub-component ─────────────────────────────────────────────────
-function MapEditor({ graph, onNodePlaced, onEdgePlaced, onDeleteEdge, onDeleteNode, placingLocation, onLocationPlaced }) {
+function MapEditor({ graph, locations, onNodePlaced, onEdgePlaced, onDeleteEdge, onDeleteNode, placingLocation, onLocationPlaced }) {
   const [edgeStart, setEdgeStart] = useState(null);
   const nodeMap = Object.fromEntries(graph.nodes.map((n) => [n.id, n]));
+  const locMap = Object.fromEntries((locations || []).map(l => [l.node_id, l.name]));
   const skipMapClick = useRef(false);
 
   function ClickHandler() {
@@ -59,7 +60,9 @@ function MapEditor({ graph, onNodePlaced, onEdgePlaced, onDeleteEdge, onDeleteNo
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       />
       <ClickHandler />
-      {graph.nodes.map((n) => (
+      {graph.nodes.map((n) => {
+        const locName = locMap[n.id];
+        return (
         <CircleMarker
           key={n.id}
           center={[n.y, n.x]}
@@ -70,9 +73,10 @@ function MapEditor({ graph, onNodePlaced, onEdgePlaced, onDeleteEdge, onDeleteNo
             contextmenu: (e) => { e.originalEvent.preventDefault(); if (!placingLocation && window.confirm(`Delete node ${n.id} and its edges?`)) onDeleteNode(n.id); },
           }}
         >
-          <Tooltip>{placingLocation ? `Assign location to node ${n.id}` : n.id}</Tooltip>
+          <Tooltip>{placingLocation ? `Assign location to node ${n.id}` : (locName ? `${locName} (Node ${n.id})` : `Node ${n.id}`)}</Tooltip>
         </CircleMarker>
-      ))}
+        );
+      })}
       {graph.edges.map((e) => {
         const from = nodeMap[e.from_node];
         const to   = nodeMap[e.to_node];
@@ -408,7 +412,7 @@ export default function AdminDashboard() {
   }, [shortcutTab]);
 
   useEffect(() => {
-    if (tab === 'locations') getLocations().then(({ data }) => setLocations(data)).catch(() => {});
+    if (tab === 'locations' || tab === 'map') getLocations().then(({ data }) => setLocations(data)).catch(() => {});
     if (tab === 'map')       getGraph().then(({ data }) => setGraph(data)).catch(() => {});
     if (tab === 'requests')  getLocationRequests(locReqTab).then(({ data }) => setLocRequests(data)).catch(() => {});
   }, [tab, locReqTab]);
@@ -639,6 +643,7 @@ export default function AdminDashboard() {
           )}
           <MapEditor
             graph={graph}
+            locations={locations}
             onNodePlaced={handleNodePlaced}
             onEdgePlaced={handleEdgePlaced}
             onDeleteEdge={handleDeleteEdge}
