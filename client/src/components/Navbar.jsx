@@ -22,16 +22,19 @@ export default function Navbar() {
         {/* Desktop links */}
         <div className="hidden sm:flex items-center gap-4">
           {user ? (
-            <>
-              {user.role === 'admin' && <Link to="/admin" className="text-sm hover:underline">Admin</Link>}
-              <Link to="/profile" className="text-sm hover:underline">{user.name || user.email}</Link>
-              <NotificationsDropdown />
-              <button onClick={handleLogout} className="text-sm hover:underline">Logout</button>
-            </>
+            user.email?.startsWith('guest_') ? (
+              <></> // Complete anonymity, no profile or logout
+            ) : (
+              <>
+                {user.role === 'admin' && <Link to="/admin" className="text-sm hover:underline">Admin</Link>}
+                <Link to="/profile" className="text-sm hover:underline">{user.name || user.email}</Link>
+                <NotificationsDropdown />
+                <button onClick={handleLogout} className="text-sm hover:underline">Logout</button>
+              </>
+            )
           ) : (
             <>
-              <Link to="/login" className="text-sm hover:underline">Login</Link>
-              <Link to="/register" className="text-sm hover:underline">Register</Link>
+              {/* Login and Register links are hidden for anonymous guests. Use Ctrl+K to login as admin. */}
             </>
           )}
         </div>
@@ -43,19 +46,13 @@ export default function Navbar() {
           </button>
         </div>
       </div>
-      {/* Mobile menu */}
       {menuOpen && (
         <div className="sm:hidden bg-campus-blue border-t border-blue-700 px-4 pb-3 flex flex-col gap-3">
-          {user ? (
+          {user && !user.email?.startsWith('guest_') && (
             <>
               {user.role === 'admin' && <Link to="/admin" onClick={() => setMenuOpen(false)} className="text-sm hover:underline">Admin</Link>}
               <Link to="/profile" onClick={() => setMenuOpen(false)} className="text-sm hover:underline">{user.name || user.email}</Link>
               <button onClick={handleLogout} className="text-sm text-left hover:underline">Logout</button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" onClick={() => setMenuOpen(false)} className="text-sm hover:underline">Login</Link>
-              <Link to="/register" onClick={() => setMenuOpen(false)} className="text-sm hover:underline">Register</Link>
             </>
           )}
         </div>

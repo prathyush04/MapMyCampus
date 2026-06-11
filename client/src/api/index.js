@@ -39,7 +39,6 @@ export const reviewLocationRequest = (id, status, edits) => api.patch(`/api/loca
 export const getNotifications = () => api.get('/api/notifications');
 export const markAllRead      = () => api.patch('/api/notifications/read-all');
 
-export const sendOtp  = (data) => api.post('/api/auth/send-otp', data);
 export const login    = (data) => api.post('/api/auth/login', data);
 export const register = (data) => api.post('/api/auth/register', data);
 export const logout   = ()     => api.post('/api/auth/logout');

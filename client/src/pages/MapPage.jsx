@@ -391,14 +391,13 @@ export default function MapPage() {
             </label>
           </div>
         )}
-        {user && user.role !== 'admin' && (
-          <div className="p-3 border-t">
-            <button onClick={() => { setSuggestMode((v) => !v); setSidebarOpen(false); }}
-              className={`w-full text-sm py-1.5 rounded border transition ${suggestMode ? 'bg-blue-50 border-campus-blue text-campus-blue' : 'border-gray-300 text-gray-600 hover:border-campus-blue'}`}>
-              {suggestMode ? '✕ Cancel suggestion' : '📍 Suggest a location'}
-            </button>
-          </div>
-        )}
+        <div className="p-3 border-t flex flex-col gap-2">
+          <button onClick={() => { setSuggestMode((v) => !v); setSidebarOpen(false); }}
+            className={`w-full text-sm py-1.5 rounded border transition ${suggestMode ? 'bg-blue-50 border-campus-blue text-campus-blue' : 'border-gray-300 text-gray-600 hover:border-campus-blue'}`}>
+            {suggestMode ? '✕ Cancel suggestion' : '📍 Suggest a location'}
+          </button>
+          {/* Shortcut feature hidden as requested */}
+        </div>
       </aside>
 
       {/* Mobile search bar */}

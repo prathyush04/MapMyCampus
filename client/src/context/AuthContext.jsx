@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { login as apiLogin, register as apiRegister, logout as apiLogout, sendOtp as apiSendOtp } from '../api';
+import { login as apiLogin, register as apiRegister, logout as apiLogout } from '../api';
 import { setAccessToken } from '../api/axios';
 import api from '../api/axios';
 
@@ -14,12 +14,20 @@ export function AuthProvider({ children }) {
     api.post('/api/auth/refresh')
       .then(({ data }) => {
         setAccessToken(data.token);
-        // Decode user from token payload (base64)
         const payload = JSON.parse(atob(data.token.split('.')[1]));
-        setUser({ id: payload.id, email: payload.email, role: payload.role });
+        setUser({ id: payload.id, email: payload.email, role: payload.role, name: payload.name });
+        setLoading(false);
       })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      .catch(() => {
+        // If refresh fails, silently register a guest account
+        api.post('/api/auth/guest')
+          .then(({ data }) => {
+            setAccessToken(data.token);
+            setUser(data.user);
+          })
+          .catch(() => {})
+          .finally(() => setLoading(false));
+      });
   }, []);
 
   const login = useCallback(async (email, password) => {
@@ -29,12 +37,8 @@ export function AuthProvider({ children }) {
     return data.user;
   }, []);
 
-  const sendOtp = useCallback(async (email) => {
-    await apiSendOtp({ email });
-  }, []);
-
-  const register = useCallback(async (email, password, name, otp) => {
-    const { data } = await apiRegister({ email, password, name, otp });
+  const register = useCallback(async (email, password, name) => {
+    const { data } = await apiRegister({ email, password, name });
     setAccessToken(data.token);
     setUser(data.user);
     return data.user;
@@ -47,7 +51,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, sendOtp }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

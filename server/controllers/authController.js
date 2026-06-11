@@ -5,29 +5,7 @@ const pool    = require('../db/pool');
 const { cache, keys } = require('../utils/cache');
 const mailer  = require('../utils/mailer');
 
-exports.sendOtp = async (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ error: 'email required' });
 
-  const domain = process.env.ALLOWED_EMAIL_DOMAIN;
-  if (domain && !email.toLowerCase().endsWith(`@${domain}`)) {
-    return res.status(400).json({ error: `Only @${domain} emails are allowed` });
-  }
-
-  const existing = await pool.query('SELECT id FROM users WHERE email=$1', [email.toLowerCase()]);
-  if (existing.rows.length) return res.status(409).json({ error: 'Email already registered' });
-
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  await cache.set(`otp:${email.toLowerCase()}`, otp, 'EX', 600);
-  
-  try {
-    await mailer.sendOtp(email.toLowerCase(), otp);
-    res.json({ message: 'OTP sent' });
-  } catch (error) {
-    console.error('Error sending OTP email:', error);
-    res.status(500).json({ error: 'Failed to send OTP email' });
-  }
-};
 
 const SALT_ROUNDS      = 12;
 const ACCESS_EXPIRY    = '15m';
@@ -59,28 +37,38 @@ function setRefreshCookie(res, token) {
 }
 
 exports.register = async (req, res) => {
-  const { email, password, name, otp } = req.body;
-  if (!email || !password || !name || !otp) return res.status(400).json({ error: 'email, password, name, and otp required' });
+  const { email, password, name } = req.body;
+  if (!email || !password || !name) return res.status(400).json({ error: 'email, password, and name required' });
 
   const domain = process.env.ALLOWED_EMAIL_DOMAIN;
   if (domain && !email.toLowerCase().endsWith(`@${domain}`)) {
     return res.status(400).json({ error: `Only @${domain} emails are allowed` });
   }
 
-  const storedOtp = await cache.get(`otp:${email.toLowerCase()}`);
-  if (!storedOtp || storedOtp !== otp) {
-    return res.status(400).json({ error: 'Invalid or expired OTP' });
-  }
-
   const existing = await pool.query('SELECT id FROM users WHERE email=$1', [email.toLowerCase()]);
   if (existing.rows.length) return res.status(409).json({ error: 'Email already registered' });
-
-  await cache.del(`otp:${email.toLowerCase()}`);
 
   const hash = await bcrypt.hash(password, SALT_ROUNDS);
   const { rows } = await pool.query(
     'INSERT INTO users(email,password_hash,name) VALUES($1,$2,$3) RETURNING id,email,name,role',
     [email.toLowerCase(), hash, name]
+  );
+  const user = rows[0];
+  const { access, refresh } = makeTokens(user);
+  await cache.set(keys.refreshSession(user.id), refresh, 'EX', REFRESH_EXPIRY_S);
+  setRefreshCookie(res, refresh);
+  res.status(201).json({ token: access, user: { id: user.id, email: user.email, name: user.name, role: user.role } });
+};
+
+exports.guest = async (req, res) => {
+  const uuid = crypto.randomUUID();
+  const email = `guest_${uuid}@anonymous.local`;
+  const name = 'Guest User';
+  const hash = await bcrypt.hash(uuid, SALT_ROUNDS);
+  
+  const { rows } = await pool.query(
+    'INSERT INTO users(email,password_hash,name) VALUES($1,$2,$3) RETURNING id,email,name,role',
+    [email, hash, name]
   );
   const user = rows[0];
   const { access, refresh } = makeTokens(user);
