@@ -184,13 +184,22 @@ export default function MapPage() {
       if (!fromNode || !toNode) { setRouteError('No graph nodes near these locations.'); return; }
 
       const { data } = await getRoute(fromNode.id, toNode.id);
-      setRoutePath(data.coordinates);
-      const dist = data.totalDistance || data.distance || 0;
+      
+      let finalCoordinates = data.coordinates;
+      let extraDist = 0;
+      if (routeFrom === 'user' && userPos && finalCoordinates.length > 0) {
+        // Visually connect the user's exact GPS location to the start of the graph
+        finalCoordinates = [{ x: userPos[1], y: userPos[0] }, ...finalCoordinates];
+        extraDist = L.latLng(userPos[0], userPos[1]).distanceTo(L.latLng(data.coordinates[0].y, data.coordinates[0].x));
+      }
+
+      setRoutePath(finalCoordinates);
+      const dist = (data.totalDistance || data.distance || 0) + extraDist;
       setRouteInfo({ distance: dist, minutes: Math.ceil(dist / 80) }); // ~80 m/min walking
       setSidebarOpen(false);
-      if (data.coordinates?.length) {
-        const lats = data.coordinates.map((n) => n.y);
-        const lngs = data.coordinates.map((n) => n.x);
+      if (finalCoordinates?.length) {
+        const lats = finalCoordinates.map((n) => n.y);
+        const lngs = finalCoordinates.map((n) => n.x);
         setFlyTo(null);
         setFitBounds([[Math.min(...lats), Math.min(...lngs)], [Math.max(...lats), Math.max(...lngs)]]);
       }
