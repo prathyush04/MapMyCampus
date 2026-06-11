@@ -436,16 +436,18 @@ export default function MapPage() {
       </aside>
 
       {/* Mobile search bar */}
-      <div className="sm:hidden absolute top-2 left-12 right-2 z-[1000]">
-        <input
-          type="text"
-          placeholder="Search locations…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onFocus={() => setSidebarOpen(true)}
-          className="w-full border rounded-full px-4 py-1.5 text-sm shadow bg-white focus:outline-none focus:ring-2 focus:ring-campus-blue"
-        />
-      </div>
+      {!sidebarOpen && (
+        <div className="sm:hidden absolute top-2 left-12 right-2 z-[1000]">
+          <input
+            type="text"
+            placeholder="Search locations…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onFocus={() => setSidebarOpen(true)}
+            className="w-full border rounded-full px-4 py-1.5 text-sm shadow bg-white focus:outline-none focus:ring-2 focus:ring-campus-blue"
+          />
+        </div>
+      )}
 
       {/* Map */}
       <div className="flex-1 relative">
