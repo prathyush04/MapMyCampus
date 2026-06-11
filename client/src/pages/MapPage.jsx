@@ -382,10 +382,12 @@ export default function MapPage() {
               <div className="font-medium text-sm truncate">{loc.name}</div>
               <div className="flex items-center gap-1 mt-0.5">
                 <CategoryBadge category={loc.category} />
-                <span className="text-xs text-amber-500 ml-1">
-                  {'★'.repeat(Math.round(loc.avg_rating || 0))}
-                  {'☆'.repeat(5 - Math.round(loc.avg_rating || 0))}
-                </span>
+                {loc.category !== 'academic' && loc.category !== 'admin' && (
+                  <span className="text-xs text-amber-500 ml-1">
+                    {'★'.repeat(Math.round(loc.avg_rating || 0))}
+                    {'☆'.repeat(5 - Math.round(loc.avg_rating || 0))}
+                  </span>
+                )}
               </div>
             </button>
           ))}
