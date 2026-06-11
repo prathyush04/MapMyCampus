@@ -73,7 +73,7 @@ function MapEditor({ graph, locations, onNodePlaced, onEdgePlaced, onDeleteEdge,
             contextmenu: (e) => { e.originalEvent.preventDefault(); if (!placingLocation && window.confirm(`Delete node ${n.id} and its edges?`)) onDeleteNode(n.id); },
           }}
         >
-          <Tooltip>{placingLocation ? `Assign location to node ${n.id}` : (locName ? `${locName} (Node ${n.id})` : `Node ${n.id}`)}</Tooltip>
+          <Tooltip>{placingLocation ? (locName ? `Reassign node ${n.id} (currently ${locName})` : `Assign location to node ${n.id}`) : (locName ? `${locName} (Node ${n.id})` : `Node ${n.id}`)}</Tooltip>
         </CircleMarker>
         );
       })}
