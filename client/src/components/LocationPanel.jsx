@@ -197,7 +197,7 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
         </div>
 
         {/* Reviews */}
-        {location.category !== 'academic' && (
+        {location.category !== 'academic' && location.category !== 'admin' && (
         <div className="px-4 py-2 border-t">
           <p className="text-xs font-semibold text-gray-500 uppercase mb-2">
             Reviews ({totalReviews})
