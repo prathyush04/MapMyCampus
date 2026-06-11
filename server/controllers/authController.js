@@ -31,7 +31,7 @@ function setRefreshCookie(res, token) {
   res.cookie('refresh_token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: REFRESH_EXPIRY_S * 1000,
   });
 }
@@ -123,6 +123,10 @@ exports.logout = async (req, res) => {
   const ttl = exp - Math.floor(Date.now() / 1000);
   if (ttl > 0) await cache.set(keys.jwtBlacklist(jti), '1', 'EX', ttl);
   await cache.del(keys.refreshSession(id));
-  res.clearCookie('refresh_token');
+  res.clearCookie('refresh_token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  });
   res.json({ message: 'Logged out' });
 };
