@@ -38,6 +38,8 @@ app.use('/api/reviews',       require('./routes/reviews'));
 app.use('/api/posts',         require('./routes/posts'));
 app.use('/api/bookmarks',     require('./routes/bookmarks'));
 app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/features', require('./routes/features'));
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use(errorHandler);
 
 // ── Socket.io ─────────────────────────────────────────────────────────────────

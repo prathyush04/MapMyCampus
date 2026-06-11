@@ -35,9 +35,13 @@ export const getMyLocationRequests = ()        => api.get('/api/location-request
 export const createLocationRequest = (data)    => api.post('/api/location-requests', data);
 export const reviewLocationRequest = (id, status, edits) => api.patch(`/api/location-requests/${id}`, { status, ...edits });
 
-
 export const getNotifications = () => api.get('/api/notifications');
-export const markAllRead      = () => api.patch('/api/notifications/read-all');
+export const markNotificationRead = (id) => api.put(`/api/notifications/${id}/read`);
+export const markAllNotificationsRead = () => api.put('/api/notifications/read-all');
+
+export const submitFeatureSuggestion = (data) => api.post('/api/features', data);
+export const getFeatureSuggestions = (status) => api.get(`/api/features${status ? `?status=${status}` : ''}`);
+export const updateFeatureStatus = (id, status) => api.put(`/api/features/${id}/status`, { status });
 
 export const login    = (data) => api.post('/api/auth/login', data);
 export const register = (data) => api.post('/api/auth/register', data);

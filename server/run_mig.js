@@ -4,9 +4,10 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejec
 
 (async () => {
   try {
-    await pool.query(`ALTER TYPE location_category ADD VALUE IF NOT EXISTS 'gates'`);
-    await pool.query(`ALTER TYPE location_category ADD VALUE IF NOT EXISTS 'parking'`);
-    console.log('Added gates and parking to location_category');
+    const fs = require('fs');
+    const sql = fs.readFileSync(require('path').resolve(__dirname, './db/migrations/012_add_feature_suggestions.sql'), 'utf8');
+    await pool.query(sql);
+    console.log('Ran migration 012_add_feature_suggestions.sql');
   } catch (e) {
     console.error(e);
   } finally {

@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Polyline, useMapEvents, CircleMarker, 
 import L from 'leaflet';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getLocations, searchLocations, getGraph, getRoute, createLocationRequest, createShortcut, getMyLocationRequests, getMyShortcuts } from '../api';
+import { getLocations, searchLocations, getGraph, getRoute, createLocationRequest, createShortcut, getMyLocationRequests, getMyShortcuts, submitFeatureSuggestion } from '../api';
 import LocationPanel from '../components/LocationPanel';
 import CategoryBadge from '../components/CategoryBadge';
 import { CATEGORY_ICON_COLOR, makeIcon } from '../utils/mapIcons';
@@ -96,6 +96,11 @@ export default function MapPage() {
   // Pending requests (own) — ghost overlays
   const [pendingLocReqs, setPendingLocReqs]   = useState([]);
   const [pendingShortcuts, setPendingShortcuts] = useState([]);
+
+  // Feature suggestion
+  const [featureModalOpen, setFeatureModalOpen] = useState(false);
+  const [featureBody, setFeatureBody] = useState('');
+  const [featureSubmitting, setFeatureSubmitting] = useState(false);
 
   // Journey
   const [journeyActive, setJourneyActive]   = useState(false);
@@ -264,6 +269,22 @@ export default function MapPage() {
     finally { setShortcutSubmitting(false); }
   };
 
+  const handleFeatureSubmit = async (e) => {
+    e.preventDefault();
+    if (!featureBody.trim()) return;
+    setFeatureSubmitting(true);
+    try {
+      await submitFeatureSuggestion({ body: featureBody });
+      alert('Feature suggestion submitted successfully! Thank you.');
+      setFeatureModalOpen(false);
+      setFeatureBody('');
+    } catch {
+      alert('Failed to submit suggestion. Please try again.');
+    } finally {
+      setFeatureSubmitting(false);
+    }
+  };
+
   const endJourney = useCallback(() => {
     if (watchIdRef.current !== null) {
       navigator.geolocation.clearWatch(watchIdRef.current);
@@ -407,6 +428,10 @@ export default function MapPage() {
             className={`w-full text-sm py-1.5 rounded border transition ${suggestMode ? 'bg-blue-50 border-campus-blue text-campus-blue' : 'border-gray-300 text-gray-600 hover:border-campus-blue'}`}>
             {suggestMode ? '✕ Cancel suggestion' : '📍 Suggest a location'}
           </button>
+          <button onClick={() => { setFeatureModalOpen(true); setSidebarOpen(false); }}
+            className="sm:hidden w-full text-sm py-1.5 rounded border border-campus-blue text-campus-blue hover:bg-blue-50 transition">
+            💡 Suggest Feature
+          </button>
         </div>
       </aside>
 
@@ -424,6 +449,13 @@ export default function MapPage() {
 
       {/* Map */}
       <div className="flex-1 relative">
+        <button
+          onClick={() => setFeatureModalOpen(true)}
+          className="hidden sm:flex absolute top-4 left-4 z-[1000] bg-white border border-campus-blue text-campus-blue px-3 py-1.5 rounded shadow text-sm font-semibold hover:bg-blue-50"
+        >
+          💡 Suggest Feature
+        </button>
+
         {shortcutMode && (
           <div className="absolute top-14 sm:top-3 left-1/2 -translate-x-1/2 z-[1000] bg-yellow-50 border border-yellow-400 rounded px-4 py-2 text-sm shadow flex items-center gap-3">
             <span>
@@ -675,6 +707,30 @@ export default function MapPage() {
                 Suggest another place at this spot?
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Feature Suggestion Modal */}
+      {featureModalOpen && (
+        <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md space-y-4">
+            <h2 className="font-bold text-lg">💡 Suggest a Feature</h2>
+            <p className="text-sm text-gray-600">Have an idea to improve MapMyCampus? Let the admins know!</p>
+            <form onSubmit={handleFeatureSubmit} className="space-y-3">
+              <textarea
+                value={featureBody}
+                onChange={(e) => setFeatureBody(e.target.value)}
+                placeholder="I would love it if..."
+                rows={4}
+                className="w-full border rounded p-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-campus-blue"
+                required
+              />
+              <div className="flex gap-2 justify-end pt-2">
+                <button type="button" onClick={() => setFeatureModalOpen(false)} className="px-4 py-1.5 border rounded text-sm text-gray-600 hover:bg-gray-50">Cancel</button>
+                <button type="submit" disabled={featureSubmitting} className="px-4 py-1.5 bg-campus-blue text-white rounded text-sm hover:bg-blue-700 disabled:opacity-50">Submit</button>
+              </div>
+            </form>
           </div>
         </div>
       )}

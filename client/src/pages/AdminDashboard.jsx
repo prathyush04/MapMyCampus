@@ -6,6 +6,7 @@ import {
   getLocations, createLocation, updateLocation, deleteLocation,
   getGraph, addNode, deleteNode, addEdge, deleteEdge,
   getLocationRequests, reviewLocationRequest,
+  getFeatureSuggestions, updateFeatureStatus
 } from '../api';
 import CategoryBadge from '../components/CategoryBadge';
 import { useSocket } from '../context/SocketContext';
@@ -402,6 +403,9 @@ export default function AdminDashboard() {
   const [locRequests, setLocRequests]           = useState([]);
   const [locReqTab, setLocReqTab]               = useState('pending');
 
+  const [features, setFeatures]                 = useState([]);
+  const [featureTab, setFeatureTab]             = useState('pending');
+
   // Load graph whenever we need request cards (to show existing nodes)
   useEffect(() => {
     getGraph().then(({ data }) => setGraph(data)).catch(() => {});
@@ -415,7 +419,8 @@ export default function AdminDashboard() {
     if (tab === 'locations' || tab === 'map') getLocations().then(({ data }) => setLocations(data)).catch(() => {});
     if (tab === 'map')       getGraph().then(({ data }) => setGraph(data)).catch(() => {});
     if (tab === 'requests')  getLocationRequests(locReqTab).then(({ data }) => setLocRequests(data)).catch(() => {});
-  }, [tab, locReqTab]);
+    if (tab === 'features')  getFeatureSuggestions(featureTab).then(({ data }) => setFeatures(data)).catch(() => {});
+  }, [tab, locReqTab, featureTab]);
 
   useEffect(() => {
     if (!socket) return;
@@ -495,7 +500,12 @@ export default function AdminDashboard() {
     if (status === 'approved') getGraph().then(({ data }) => setGraph(data)).catch(() => {});
   };
 
-  const TABS = ['shortcuts', 'locations', 'map', 'requests'];
+  const handleFeatureReview = async (id, status) => {
+    await updateFeatureStatus(id, status);
+    setFeatures((prev) => prev.filter((f) => f.id !== id));
+  };
+
+  const TABS = ['shortcuts', 'locations', 'map', 'requests', 'features'];
 
   return (
     <div className="p-4 sm:p-6 max-w-5xl mx-auto overflow-y-auto h-full">
@@ -672,6 +682,48 @@ export default function AdminDashboard() {
           <div className="space-y-4">
             {locRequests.map((r) => (
               <LocationRequestCard key={r.id} request={r} status={locReqTab} onReview={handleLocReqReview} graphNodes={graph.nodes} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Features Tab ── */}
+      {tab === 'features' && (
+        <div>
+          <div className="flex gap-2 mb-4 overflow-x-auto">
+            {['pending','planned','implemented','rejected'].map((s) => (
+              <button key={s} onClick={() => setFeatureTab(s)}
+                className={`px-3 py-1 text-sm rounded-full border capitalize shrink-0 ${
+                  featureTab === s ? 'bg-campus-blue text-white border-campus-blue' : 'text-gray-600'
+                }`}>{s}</button>
+            ))}
+          </div>
+          {features.length === 0 && <p className="text-gray-400 text-sm">No {featureTab} suggestions.</p>}
+          <div className="space-y-4">
+            {features.map((f) => (
+              <div key={f.id} className="border rounded p-4 space-y-3">
+                <div className="flex justify-between items-start gap-4">
+                  <div>
+                    <p className="font-medium text-sm text-gray-900">{f.body}</p>
+                    <p className="text-xs text-gray-400 mt-1">Suggested by {f.user_name || 'Guest'} · {new Date(f.created_at).toLocaleString()}</p>
+                  </div>
+                  {featureTab !== 'pending' && (
+                    <span className="text-xs font-semibold capitalize px-2 py-1 bg-gray-100 rounded">{f.status}</span>
+                  )}
+                </div>
+                {featureTab === 'pending' && (
+                  <div className="flex gap-2 mt-3">
+                    <button onClick={() => handleFeatureReview(f.id, 'planned')} className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">Mark Planned</button>
+                    <button onClick={() => handleFeatureReview(f.id, 'implemented')} className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">Mark Implemented</button>
+                    <button onClick={() => handleFeatureReview(f.id, 'rejected')} className="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700">Reject</button>
+                  </div>
+                )}
+                {featureTab === 'planned' && (
+                  <div className="flex gap-2 mt-3">
+                    <button onClick={() => handleFeatureReview(f.id, 'implemented')} className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">Mark Implemented</button>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
