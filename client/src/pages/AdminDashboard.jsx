@@ -17,7 +17,7 @@ const CATEGORIES = ['food','academic','sports','admin','medical','facility','oth
 function MapEditor({ graph, locations, onNodePlaced, onEdgePlaced, onDeleteEdge, onDeleteNode, placingLocation, onLocationPlaced }) {
   const [edgeStart, setEdgeStart] = useState(null);
   const nodeMap = Object.fromEntries(graph.nodes.map((n) => [n.id, n]));
-  const locMap = Object.fromEntries((locations || []).map(l => [l.node_id, l.name]));
+  const locMap = Object.fromEntries((locations || []).map(l => [l.id, l.name]));
   const skipMapClick = useRef(false);
 
   function ClickHandler() {
@@ -61,7 +61,7 @@ function MapEditor({ graph, locations, onNodePlaced, onEdgePlaced, onDeleteEdge,
       />
       <ClickHandler />
       {graph.nodes.map((n) => {
-        const locName = locMap[n.id];
+        const locName = n.location_id ? locMap[n.location_id] : null;
         return (
         <CircleMarker
           key={n.id}
