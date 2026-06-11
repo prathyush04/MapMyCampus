@@ -33,8 +33,8 @@ function bearing(from, to) {
 function makeLeafletIcon(color, selected) {
   return L.icon({
     iconUrl: makeIcon(color, selected),
-    iconSize:   [selected ? 36 : 28, selected ? 36 : 28],
-    iconAnchor: [selected ? 18 : 14, selected ? 36 : 28],
+    iconSize:   [selected ? 28 : 20, selected ? 28 : 20],
+    iconAnchor: [selected ? 14 : 10, selected ? 28 : 20],
   });
 }
 

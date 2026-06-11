@@ -11,7 +11,7 @@ export const CATEGORY_ICON_COLOR = {
 
 // Returns an SVG data URL for a coloured pin marker
 export function makeIcon(color = '#3b82f6', selected = false) {
-  const size = selected ? 36 : 28;
+  const size = selected ? 28 : 20;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="${size}" height="${size}">
     <path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 24 12 24s12-15 12-24C24 5.373 18.627 0 12 0z"
           fill="${color}" stroke="white" stroke-width="1.5"/>
