@@ -100,7 +100,9 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
           <h2 className="font-bold text-lg leading-tight truncate">{location.name}</h2>
           <div className="flex items-center gap-2 mt-1">
             <CategoryBadge category={location.category} />
-            <StarRating value={location.avg_rating} />
+            {location.category !== 'academic' && location.category !== 'admin' && (
+              <StarRating value={location.avg_rating} />
+            )}
           </div>
         </div>
         <div className="flex gap-2 shrink-0">
