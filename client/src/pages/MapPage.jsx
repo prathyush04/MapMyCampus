@@ -356,7 +356,7 @@ export default function MapPage() {
         w-72 bg-white border-r flex flex-col shrink-0
         transition-transform duration-200
       `}>
-        <div className="p-3 border-b">
+        <div className="p-3 pt-3 pl-14 sm:pl-3 border-b">
           <input
             type="text"
             placeholder="Search locations…"
