@@ -11,11 +11,11 @@ export const CATEGORY_ICON_COLOR = {
 
 // Returns an SVG data URL for a coloured pin marker
 export function makeIcon(color = '#3b82f6', selected = false) {
-  const size = selected ? 28 : 20;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="${size}" height="${size}">
-    <path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 24 12 24s12-15 12-24C24 5.373 18.627 0 12 0z"
-          fill="${color}" stroke="white" stroke-width="1.5"/>
-    <circle cx="12" cy="12" r="5" fill="white"/>
+  const size = selected ? 32 : 24;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 36" width="${size}" height="${size * 1.125}">
+    <path d="M16 0C8.268 0 2 6.268 2 14c0 10.5 14 22 14 22s14-11.5 14-22C30 6.268 23.732 0 16 0z"
+          fill="${color}" stroke="#0f172a" stroke-width="1.5" stroke-opacity="0.5" />
+    <circle cx="16" cy="14" r="6" fill="#0f172a" />
   </svg>`;
   return `data:image/svg+xml;base64,${btoa(svg)}`;
 }

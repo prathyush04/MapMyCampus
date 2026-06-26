@@ -31,10 +31,12 @@ function bearing(from, to) {
 }
 
 function makeLeafletIcon(color, selected) {
+  const w = selected ? 32 : 24;
+  const h = selected ? 36 : 27;
   return L.icon({
     iconUrl: makeIcon(color, selected),
-    iconSize:   [selected ? 28 : 20, selected ? 28 : 20],
-    iconAnchor: [selected ? 14 : 10, selected ? 28 : 20],
+    iconSize:   [w, h],
+    iconAnchor: [w / 2, h],
   });
 }
 
@@ -492,7 +494,9 @@ export default function MapPage() {
               <Marker key={loc.id} position={[loc.lat, loc.lng]}
                 icon={makeLeafletIcon(color, selectedLocation === loc.id)}
                 eventHandlers={{ click: () => { setSelectedLocation(loc.id); setFlyTo([loc.lat, loc.lng]); } }}>
-                <Tooltip>{loc.name}</Tooltip>
+                <Tooltip permanent={loc.category === 'academic' || loc.category === 'admin'} className="bg-slate-900 text-gray-100 border-slate-700 rounded-md font-medium text-xs">
+                  {loc.name}
+                </Tooltip>
               </Marker>
             );
           })}
