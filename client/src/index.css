@@ -2,8 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: #020617; /* slate-950 */
+  color: #f1f5f9; /* slate-100 */
+}
+
 /* Leaflet fix inside flex containers */
 .leaflet-container {
   height: 100%;
   width: 100%;
+  background-color: #020617 !important; /* Fix white flashes */
 }

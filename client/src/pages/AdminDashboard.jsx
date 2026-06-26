@@ -508,11 +508,11 @@ export default function AdminDashboard() {
   const TABS = ['shortcuts', 'locations', 'map', 'requests', 'features'];
 
   return (
-    <div className="bg-gray-50 h-full overflow-y-auto animate-fade-in-up">
+    <div className="bg-slate-950 text-gray-100 h-full overflow-y-auto animate-fade-in-up">
       <div className="p-4 sm:p-6 max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">Admin Dashboard</h1>
-          <button onClick={() => navigate('/')} className="bg-white border border-gray-200 text-campus-blue font-medium text-sm px-4 py-2 rounded-xl hover:bg-blue-50 hover:border-campus-blue shadow-sm transition-all">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">Admin Dashboard</h1>
+          <button onClick={() => navigate('/')} className="bg-slate-800 border border-slate-700 text-campus-blue font-medium text-sm px-4 py-2 rounded-xl hover:bg-slate-700 hover:border-campus-blue shadow-sm transition-all">
             🗺 Back to Map
           </button>
         </div>
@@ -524,7 +524,7 @@ export default function AdminDashboard() {
               key={t}
               onClick={() => setTab(t)}
               className={`px-4 py-2 text-sm font-medium rounded-full capitalize whitespace-nowrap transition-all duration-200 ${
-                tab === t ? 'bg-campus-blue text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+                tab === t ? 'bg-campus-blue text-white shadow-md' : 'bg-slate-800 text-gray-400 border border-slate-700 hover:bg-slate-700 hover:border-slate-600 hover:text-white'
               }`}
             >
               {t}

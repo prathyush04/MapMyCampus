@@ -339,11 +339,11 @@ export default function MapPage() {
   const locationName = (id) => id === 'user' ? '📍 My Location' : locations.find((l) => l.id === id)?.name || '—';
 
   return (
-    <div className="flex h-full relative">
+    <div className="flex h-full relative bg-slate-950 text-gray-100">
       {/* Mobile sidebar toggle */}
       <button
         onClick={() => setSidebarOpen((o) => !o)}
-        className="sm:hidden absolute top-2 left-2 z-[1000] bg-white border rounded-full w-9 h-9 flex items-center justify-center shadow text-lg"
+        className="sm:hidden absolute top-2 left-2 z-[1000] bg-slate-900 border border-slate-700 rounded-full w-9 h-9 flex items-center justify-center shadow text-lg text-gray-100"
       >
         {sidebarOpen ? '✕' : '☰'}
       </button>
@@ -353,54 +353,54 @@ export default function MapPage() {
         ${ sidebarOpen ? 'translate-x-0 shadow-soft' : '-translate-x-full' }
         sm:translate-x-0 sm:relative sm:flex sm:shadow-soft
         absolute inset-y-0 left-0 z-[999]
-        w-72 bg-white/95 backdrop-blur-xl border-r border-gray-100 flex flex-col shrink-0
+        w-72 bg-slate-900/95 backdrop-blur-xl border-r border-slate-800 flex flex-col shrink-0
         transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
       `}>
-        <div className="p-3 pt-3 pl-14 sm:pl-3 border-b">
+        <div className="p-3 pt-3 pl-14 sm:pl-3 border-b border-slate-800">
           <input
             type="text"
             placeholder="Search locations…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full border border-gray-200 rounded-full px-4 py-2 text-sm bg-white/80 focus:outline-none focus:ring-2 focus:ring-campus-blue/50 transition-shadow"
+            className="w-full border border-slate-700 rounded-full px-4 py-2 text-sm bg-slate-800/80 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-campus-blue/50 transition-shadow"
           />
           <div className="flex flex-wrap gap-1 mt-2">
             {['all', ...CATEGORIES].map((c) => (
               <button key={c} onClick={() => setActiveCategory(activeCategory === c || c === 'all' ? null : c)}
                 className={`text-xs px-2 py-0.5 rounded-full border capitalize transition ${
-                  (activeCategory === c || (c === 'all' && !activeCategory)) ? 'bg-campus-blue text-white border-campus-blue' : 'text-gray-600 border-gray-300 hover:border-campus-blue'
+                  (activeCategory === c || (c === 'all' && !activeCategory)) ? 'bg-campus-blue text-white border-campus-blue' : 'text-gray-400 border-slate-700 hover:border-campus-blue hover:text-white'
                 }`}>{c}</button>
             ))}
           </div>
         </div>
 
         {/* Routing panel */}
-        <div className="p-3 border-b space-y-2">
-          <p className="text-xs font-semibold text-gray-500 uppercase">Get Directions</p>
+        <div className="p-3 border-b border-slate-800 space-y-2">
+          <p className="text-xs font-semibold text-gray-400 uppercase">Get Directions</p>
           <select value={routeFrom || ''} onChange={(e) => setRouteFrom(e.target.value || null)}
-            className="w-full border rounded px-2 py-1 text-sm">
+            className="w-full border border-slate-700 bg-slate-800 text-white rounded px-2 py-1 text-sm">
             <option value="">From…</option>
             <option value="user">📍 My Location</option>
             {locations.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
           </select>
           <select value={routeTo || ''} onChange={(e) => setRouteTo(e.target.value || null)}
-            className="w-full border rounded px-2 py-1 text-sm">
+            className="w-full border border-slate-700 bg-slate-800 text-white rounded px-2 py-1 text-sm">
             <option value="">To…</option>
             {locations.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
           </select>
-          {routeError && <p className="text-xs text-red-500">{routeError}</p>}
+          {routeError && <p className="text-xs text-red-400">{routeError}</p>}
           {routePath && (
             <button onClick={() => { setRoutePath(null); setRouteFrom(null); setRouteTo(null); setFitBounds(null); setRouteInfo(null); }}
-              className="text-xs text-red-400 hover:text-red-600">✕ Clear route</button>
+              className="text-xs text-red-400 hover:text-red-300">✕ Clear route</button>
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
           {filtered.map((loc) => (
             <button key={loc.id}
               onClick={() => { setSelectedLocation(loc.id); setFlyTo([loc.lat, loc.lng]); setSidebarOpen(false); }}
-              className={`w-full text-left px-4 py-3 border-b border-gray-50 hover:bg-slate-50 transition-colors ${selectedLocation === loc.id ? 'bg-blue-50/50' : ''}`}>
-              <div className="font-medium text-sm truncate">{loc.name}</div>
+              className={`w-full text-left px-4 py-3 border-b border-slate-800 hover:bg-slate-800 transition-colors ${selectedLocation === loc.id ? 'bg-blue-900/30' : ''}`}>
+              <div className="font-medium text-sm text-gray-100 truncate">{loc.name}</div>
               <div className="flex items-center gap-1 mt-0.5">
                 <CategoryBadge category={loc.category} />
                 {loc.category !== 'academic' && loc.category !== 'admin' && (
@@ -412,24 +412,24 @@ export default function MapPage() {
               </div>
             </button>
           ))}
-          {filtered.length === 0 && <p className="text-xs text-gray-400 text-center p-6">No locations found</p>}
+          {filtered.length === 0 && <p className="text-xs text-gray-500 text-center p-6">No locations found</p>}
         </div>
 
         {user?.role === 'admin' && (
-          <div className="p-3 border-t">
-            <label className="flex items-center gap-2 text-sm cursor-pointer text-gray-700">
-              <input type="checkbox" checked={showGraph} onChange={(e) => setShowGraph(e.target.checked)} className="rounded text-campus-blue focus:ring-campus-blue" />
+          <div className="p-3 border-t border-slate-800">
+            <label className="flex items-center gap-2 text-sm cursor-pointer text-gray-300">
+              <input type="checkbox" checked={showGraph} onChange={(e) => setShowGraph(e.target.checked)} className="rounded bg-slate-800 border-slate-700 text-campus-blue focus:ring-campus-blue" />
               Show graph overlay
             </label>
           </div>
         )}
-        <div className="p-4 border-t border-gray-100 flex flex-col gap-2 bg-gray-50/50">
+        <div className="p-4 border-t border-slate-800 flex flex-col gap-2 bg-slate-900/50">
           <button onClick={() => { setSuggestMode((v) => !v); setSidebarOpen(false); }}
-            className={`w-full text-sm font-medium py-2 rounded-xl border transition-all duration-200 ${suggestMode ? 'bg-blue-50 border-campus-blue text-campus-blue shadow-sm' : 'border-gray-200 text-gray-700 hover:border-campus-blue hover:text-campus-blue hover:shadow-sm bg-white'}`}>
+            className={`w-full text-sm font-medium py-2 rounded-xl border transition-all duration-200 ${suggestMode ? 'bg-blue-900 border-campus-blue text-blue-100 shadow-sm' : 'border-slate-700 text-gray-300 hover:border-campus-blue hover:text-white bg-slate-800'}`}>
             {suggestMode ? '✕ Cancel suggestion' : '📍 Suggest a location'}
           </button>
           <button onClick={() => { setFeatureModalOpen(true); setSidebarOpen(false); }}
-            className="sm:hidden w-full text-sm font-medium py-2 rounded-xl border border-campus-blue text-campus-blue hover:bg-blue-50 transition-all duration-200 shadow-sm bg-white">
+            className="sm:hidden w-full text-sm font-medium py-2 rounded-xl border border-campus-blue text-blue-400 hover:bg-blue-900/50 transition-all duration-200 shadow-sm bg-slate-800">
             💡 Suggest Feature
           </button>
         </div>
@@ -444,7 +444,7 @@ export default function MapPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onFocus={() => setSidebarOpen(true)}
-            className="w-full border-0 rounded-full px-5 py-2.5 text-sm shadow-glass bg-white/90 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-campus-blue/50 transition-all"
+            className="w-full border border-slate-700 rounded-full px-5 py-2.5 text-sm shadow-glass bg-slate-900/90 text-white placeholder-gray-400 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-campus-blue/50 transition-all"
           />
         </div>
       )}
@@ -477,7 +477,7 @@ export default function MapPage() {
 
         <MapContainer center={CENTER} zoom={16} style={{ height: '100%', width: '100%' }} zoomControl={false}>
           <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
           />
           <ZoomControl position="bottomright" />

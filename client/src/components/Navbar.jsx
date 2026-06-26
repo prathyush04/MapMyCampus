@@ -15,7 +15,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-campus-blue/90 backdrop-blur-md text-white shrink-0 z-50 shadow-glass border-b border-white/10 transition-colors duration-300">
+    <nav className="bg-slate-900/95 backdrop-blur-md text-gray-100 shrink-0 z-50 shadow-glass border-b border-slate-800 transition-colors duration-300">
       <div className="flex items-center px-4 h-12 gap-4">
         <Link to="/" className="font-bold text-lg tracking-tight">🗺 MapMyCampus</Link>
         <div className="flex-1" />
@@ -50,7 +50,7 @@ export default function Navbar() {
         </div>
       </div>
       {menuOpen && (
-        <div className="sm:hidden bg-campus-blue/95 backdrop-blur-md border-t border-white/10 px-4 pb-3 pt-2 flex flex-col gap-3 shadow-glass">
+        <div className="sm:hidden bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-4 pb-3 pt-2 flex flex-col gap-3 shadow-glass">
           {(!user || user.email?.startsWith('guest_')) ? (
             <Link to="/login" onClick={() => setMenuOpen(false)} className="text-sm hover:text-blue-200 transition-colors flex items-center gap-2">
               🔒 Admin Login
