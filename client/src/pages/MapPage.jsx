@@ -40,8 +40,8 @@ function makeLeafletIcon(color, selected) {
 
 const userIcon = L.divIcon({
   className: '',
-  html: `<div style="width:14px;height:14px;border-radius:50%;background:#3b82f6;border:2px solid white;box-shadow:0 0 6px rgba(0,0,0,0.4)"></div>`,
-  iconAnchor: [7, 7],
+  html: `<div style="width:16px;height:16px;border-radius:50%;background:#3b82f6;border:3px solid white;box-shadow:0 0 10px 2px rgba(59, 130, 246, 0.6)"></div>`,
+  iconAnchor: [8, 8],
 });
 
 function MapController({ flyTo, fitBounds }) {
@@ -477,8 +477,8 @@ export default function MapPage() {
 
         <MapContainer center={CENTER} zoom={16} style={{ height: '100%', width: '100%' }} zoomControl={false}>
           <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
           />
           <ZoomControl position="bottomright" />
           <MapController flyTo={flyTo} fitBounds={fitBounds} />

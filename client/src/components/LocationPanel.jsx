@@ -89,7 +89,7 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
   const hours = location.operating_hours || {};
 
   return (
-    <div className="fixed sm:relative bottom-0 left-0 right-0 sm:inset-auto sm:w-96 bg-white/95 backdrop-blur-xl sm:h-full flex flex-col shadow-2xl overflow-hidden z-[1001] rounded-t-3xl sm:rounded-none max-h-[80vh] sm:max-h-full border-t border-gray-100 sm:border-t-0 sm:border-l">
+    <div className="animate-fade-in-up fixed sm:relative bottom-0 left-0 right-0 sm:inset-auto sm:w-96 bg-white/95 backdrop-blur-xl sm:h-full flex flex-col shadow-2xl overflow-hidden z-[1001] rounded-t-3xl sm:rounded-none max-h-[80vh] sm:max-h-full border-t border-gray-100 sm:border-t-0 sm:border-l">
       {/* Mobile drag handle */}
       <div className="sm:hidden flex justify-center pt-3 pb-2 shrink-0">
         <div className="w-12 h-1.5 rounded-full bg-gray-200" />

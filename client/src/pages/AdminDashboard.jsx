@@ -508,7 +508,7 @@ export default function AdminDashboard() {
   const TABS = ['shortcuts', 'locations', 'map', 'requests', 'features'];
 
   return (
-    <div className="bg-gray-50 h-full overflow-y-auto">
+    <div className="bg-gray-50 h-full overflow-y-auto animate-fade-in-up">
       <div className="p-4 sm:p-6 max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">Admin Dashboard</h1>
