@@ -21,22 +21,16 @@ export default function Navbar() {
         <div className="flex-1" />
         {/* Desktop links */}
         <div className="hidden sm:flex items-center gap-4">
-          {user ? (
-            user.email?.startsWith('guest_') ? (
-              <></> // Complete anonymity, no profile or logout
-            ) : (
-              <>
-                {user.role === 'admin' && <Link to="/admin" className="text-sm hover:underline">Admin</Link>}
-                <Link to="/profile" className="text-sm hover:underline">{user.name || user.email}</Link>
-                <NotificationsDropdown />
-                <button onClick={handleLogout} className="text-sm hover:underline">Logout</button>
-              </>
-            )
+          {(!user || user.email?.startsWith('guest_')) ? (
+            <Link to="/login" className="text-xs text-blue-100 hover:text-white bg-white/10 hover:bg-slate-700 px-3 py-1.5 rounded-full transition-all flex items-center gap-1">
+              🔒 Admin
+            </Link>
           ) : (
             <>
-              <Link to="/login" className="text-xs text-blue-100 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition-all flex items-center gap-1">
-                🔒 Admin
-              </Link>
+              {user.role === 'admin' && <Link to="/admin" className="text-sm hover:text-blue-300 transition-colors">Admin</Link>}
+              <Link to="/profile" className="text-sm hover:text-blue-300 transition-colors">{user.name || user.email}</Link>
+              <NotificationsDropdown />
+              <button onClick={handleLogout} className="text-sm hover:text-red-400 transition-colors">Logout</button>
             </>
           )}
         </div>
