@@ -15,7 +15,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-campus-blue text-white shrink-0 z-50">
+    <nav className="bg-campus-blue/90 backdrop-blur-md text-white shrink-0 z-50 shadow-glass border-b border-white/10 transition-colors duration-300">
       <div className="flex items-center px-4 h-12 gap-4">
         <Link to="/" className="font-bold text-lg tracking-tight">🗺 MapMyCampus</Link>
         <div className="flex-1" />
@@ -49,12 +49,12 @@ export default function Navbar() {
         )}
       </div>
       {menuOpen && (
-        <div className="sm:hidden bg-campus-blue border-t border-blue-700 px-4 pb-3 flex flex-col gap-3">
+        <div className="sm:hidden bg-campus-blue/95 backdrop-blur-md border-t border-white/10 px-4 pb-3 pt-2 flex flex-col gap-3 shadow-glass">
           {user && !user.email?.startsWith('guest_') && (
             <>
-              {user.role === 'admin' && <Link to="/admin" onClick={() => setMenuOpen(false)} className="text-sm hover:underline">Admin</Link>}
-              <Link to="/profile" onClick={() => setMenuOpen(false)} className="text-sm hover:underline">{user.name || user.email}</Link>
-              <button onClick={handleLogout} className="text-sm text-left hover:underline">Logout</button>
+              {user.role === 'admin' && <Link to="/admin" onClick={() => setMenuOpen(false)} className="text-sm hover:text-blue-200 transition-colors">Admin Dashboard</Link>}
+              <Link to="/profile" onClick={() => setMenuOpen(false)} className="text-sm hover:text-blue-200 transition-colors">{user.name || user.email}</Link>
+              <button onClick={handleLogout} className="text-sm text-left hover:text-red-300 transition-colors">Logout</button>
             </>
           )}
         </div>

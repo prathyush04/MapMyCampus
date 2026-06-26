@@ -80,7 +80,7 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
 
   if (!location) {
     return (
-      <div className="fixed sm:relative bottom-0 left-0 right-0 h-48 sm:inset-auto sm:w-96 bg-white sm:h-full flex items-center justify-center text-gray-400 text-sm z-[998] rounded-t-2xl sm:rounded-none shadow-xl">
+      <div className="fixed sm:relative bottom-0 left-0 right-0 h-48 sm:inset-auto sm:w-96 bg-white/95 backdrop-blur-xl sm:h-full flex items-center justify-center text-gray-400 text-sm z-[998] rounded-t-3xl sm:rounded-none shadow-2xl">
         Loading…
       </div>
     );
@@ -89,10 +89,10 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
   const hours = location.operating_hours || {};
 
   return (
-    <div className="fixed sm:relative bottom-0 left-0 right-0 sm:inset-auto sm:w-96 bg-white sm:h-full flex flex-col shadow-xl overflow-hidden z-[1001] rounded-t-2xl sm:rounded-none max-h-[75vh] sm:max-h-full">
+    <div className="fixed sm:relative bottom-0 left-0 right-0 sm:inset-auto sm:w-96 bg-white/95 backdrop-blur-xl sm:h-full flex flex-col shadow-2xl overflow-hidden z-[1001] rounded-t-3xl sm:rounded-none max-h-[80vh] sm:max-h-full border-t border-gray-100 sm:border-t-0 sm:border-l">
       {/* Mobile drag handle */}
-      <div className="sm:hidden flex justify-center pt-2 pb-1 shrink-0">
-        <div className="w-10 h-1 rounded-full bg-gray-300" />
+      <div className="sm:hidden flex justify-center pt-3 pb-2 shrink-0">
+        <div className="w-12 h-1.5 rounded-full bg-gray-200" />
       </div>
       {/* Header */}
       <div className="flex items-start p-4 border-b gap-2">
@@ -113,17 +113,20 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
           >
             {bookmarked ? '🔖' : '📌'}
           </button>
-          <button
-            onClick={() => onGetDirections(locationId)}
-            className="text-xs bg-campus-blue text-white px-2 py-1 rounded"
-          >
-            Directions
+          <button onClick={onClose} className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors self-start">
+            ✕
           </button>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-700 text-xl leading-none">×</button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto custom-scrollbar">
+        {/* Buttons */}
+        <div className="p-4 flex gap-2 border-b border-gray-50 bg-gray-50/50">
+          <button onClick={() => onGetDirections(location.id)} className="flex-1 bg-campus-blue text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            Directions
+          </button>
+        </div>
+        
         {/* Photos */}
         {location.photos?.length > 0 && (
           <div className="flex gap-1 p-2 overflow-x-auto">
@@ -205,16 +208,16 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
             Reviews ({totalReviews})
           </p>
           {reviews.map((r) => (
-            <div key={r.id} className="border rounded p-2 mb-2 text-sm">
-              <div className="flex justify-between">
+            <div key={r.id} className="border border-gray-100 rounded-xl p-4 mb-3 bg-white shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex justify-between items-start mb-2">
                 <span className="font-medium">{r.user_name}</span>
                 <StarRating value={r.rating} />
               </div>
-              {r.body && <p className="text-gray-600 mt-1 text-xs">{r.body}</p>}
-              <div className="flex items-center gap-2 mt-1">
+              <p className="text-sm text-gray-700 leading-relaxed">{r.body}</p>
+              <div className="mt-3 flex justify-end items-center gap-2">
                 <button
                   onClick={() => handleVote(r.id)}
-                  className={`text-xs ${votedReviews.has(r.id) ? 'text-blue-600' : 'text-gray-400'} hover:text-blue-600`}
+                  className={`text-xs flex items-center gap-1 font-medium px-2 py-1 rounded-md transition-colors ${votedReviews.has(r.id) ? 'text-blue-600 bg-blue-50' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}`}
                 >
                   👍 {r.helpful_count}
                 </button>

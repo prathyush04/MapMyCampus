@@ -350,11 +350,11 @@ export default function MapPage() {
 
       {/* Sidebar */}
       <aside className={`
-        ${ sidebarOpen ? 'translate-x-0' : '-translate-x-full' }
-        sm:translate-x-0 sm:relative sm:flex
+        ${ sidebarOpen ? 'translate-x-0 shadow-soft' : '-translate-x-full' }
+        sm:translate-x-0 sm:relative sm:flex sm:shadow-soft
         absolute inset-y-0 left-0 z-[999]
-        w-72 bg-white border-r flex flex-col shrink-0
-        transition-transform duration-200
+        w-72 bg-white/95 backdrop-blur-xl border-r border-gray-100 flex flex-col shrink-0
+        transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
       `}>
         <div className="p-3 pt-3 pl-14 sm:pl-3 border-b">
           <input
@@ -362,7 +362,7 @@ export default function MapPage() {
             placeholder="Search locations…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            className="w-full border border-gray-200 rounded-full px-4 py-2 text-sm bg-white/80 focus:outline-none focus:ring-2 focus:ring-campus-blue/50 transition-shadow"
           />
           <div className="flex flex-wrap gap-1 mt-2">
             {['all', ...CATEGORIES].map((c) => (
@@ -399,7 +399,7 @@ export default function MapPage() {
           {filtered.map((loc) => (
             <button key={loc.id}
               onClick={() => { setSelectedLocation(loc.id); setFlyTo([loc.lat, loc.lng]); setSidebarOpen(false); }}
-              className={`w-full text-left px-3 py-2 border-b hover:bg-gray-50 transition ${selectedLocation === loc.id ? 'bg-blue-50' : ''}`}>
+              className={`w-full text-left px-4 py-3 border-b border-gray-50 hover:bg-slate-50 transition-colors ${selectedLocation === loc.id ? 'bg-blue-50/50' : ''}`}>
               <div className="font-medium text-sm truncate">{loc.name}</div>
               <div className="flex items-center gap-1 mt-0.5">
                 <CategoryBadge category={loc.category} />
@@ -417,19 +417,19 @@ export default function MapPage() {
 
         {user?.role === 'admin' && (
           <div className="p-3 border-t">
-            <label className="flex items-center gap-2 text-sm cursor-pointer">
-              <input type="checkbox" checked={showGraph} onChange={(e) => setShowGraph(e.target.checked)} />
+            <label className="flex items-center gap-2 text-sm cursor-pointer text-gray-700">
+              <input type="checkbox" checked={showGraph} onChange={(e) => setShowGraph(e.target.checked)} className="rounded text-campus-blue focus:ring-campus-blue" />
               Show graph overlay
             </label>
           </div>
         )}
-        <div className="p-3 border-t flex flex-col gap-2">
+        <div className="p-4 border-t border-gray-100 flex flex-col gap-2 bg-gray-50/50">
           <button onClick={() => { setSuggestMode((v) => !v); setSidebarOpen(false); }}
-            className={`w-full text-sm py-1.5 rounded border transition ${suggestMode ? 'bg-blue-50 border-campus-blue text-campus-blue' : 'border-gray-300 text-gray-600 hover:border-campus-blue'}`}>
+            className={`w-full text-sm font-medium py-2 rounded-xl border transition-all duration-200 ${suggestMode ? 'bg-blue-50 border-campus-blue text-campus-blue shadow-sm' : 'border-gray-200 text-gray-700 hover:border-campus-blue hover:text-campus-blue hover:shadow-sm bg-white'}`}>
             {suggestMode ? '✕ Cancel suggestion' : '📍 Suggest a location'}
           </button>
           <button onClick={() => { setFeatureModalOpen(true); setSidebarOpen(false); }}
-            className="sm:hidden w-full text-sm py-1.5 rounded border border-campus-blue text-campus-blue hover:bg-blue-50 transition">
+            className="sm:hidden w-full text-sm font-medium py-2 rounded-xl border border-campus-blue text-campus-blue hover:bg-blue-50 transition-all duration-200 shadow-sm bg-white">
             💡 Suggest Feature
           </button>
         </div>
@@ -444,7 +444,7 @@ export default function MapPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onFocus={() => setSidebarOpen(true)}
-            className="w-full border rounded-full px-4 py-1.5 text-sm shadow bg-white focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            className="w-full border-0 rounded-full px-5 py-2.5 text-sm shadow-glass bg-white/90 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-campus-blue/50 transition-all"
           />
         </div>
       )}
@@ -453,7 +453,7 @@ export default function MapPage() {
       <div className="flex-1 relative">
         <button
           onClick={() => setFeatureModalOpen(true)}
-          className="hidden sm:flex absolute top-4 left-4 z-[1000] bg-white border border-campus-blue text-campus-blue px-3 py-1.5 rounded shadow text-sm font-semibold hover:bg-blue-50"
+          className="hidden sm:flex absolute top-4 left-4 z-[1000] bg-white/90 backdrop-blur-md border border-gray-100 text-campus-blue px-4 py-2 rounded-full shadow-glass text-sm font-semibold hover:bg-blue-50 hover:scale-105 transition-all duration-200"
         >
           💡 Suggest Feature
         </button>

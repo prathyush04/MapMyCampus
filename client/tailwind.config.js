@@ -3,6 +3,13 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+      boxShadow: {
+        'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
+        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+      },
       colors: {
         campus: {
           blue:   '#1d4ed8',

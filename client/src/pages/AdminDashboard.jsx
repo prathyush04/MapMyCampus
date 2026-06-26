@@ -508,26 +508,29 @@ export default function AdminDashboard() {
   const TABS = ['shortcuts', 'locations', 'map', 'requests', 'features'];
 
   return (
-    <div className="p-4 sm:p-6 max-w-5xl mx-auto overflow-y-auto h-full">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl sm:text-2xl font-bold">Admin Dashboard</h1>
-        <button onClick={() => navigate('/')} className="bg-campus-blue text-white text-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded hover:bg-blue-700">
-          🗺 Map
-        </button>
-      </div>
-      <div className="flex gap-1 sm:gap-2 mb-6 border-b overflow-x-auto">
-        {TABS.map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`pb-2 px-4 text-sm capitalize border-b-2 transition ${
-              tab === t ? 'border-campus-blue text-campus-blue font-semibold' : 'border-transparent text-gray-500'
-            }`}
-          >
-            {t}
+    <div className="bg-gray-50 h-full overflow-y-auto">
+      <div className="p-4 sm:p-6 max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900">Admin Dashboard</h1>
+          <button onClick={() => navigate('/')} className="bg-white border border-gray-200 text-campus-blue font-medium text-sm px-4 py-2 rounded-xl hover:bg-blue-50 hover:border-campus-blue shadow-sm transition-all">
+            🗺 Back to Map
           </button>
-        ))}
-      </div>
+        </div>
+        
+        {/* Modern Pill Tabs */}
+        <div className="flex gap-2 mb-8 overflow-x-auto pb-2 custom-scrollbar">
+          {TABS.map((t) => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={`px-4 py-2 text-sm font-medium rounded-full capitalize whitespace-nowrap transition-all duration-200 ${
+                tab === t ? 'bg-campus-blue text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+              }`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
 
       {/* ── Shortcuts Tab ── */}
       {tab === 'shortcuts' && (
@@ -552,80 +555,47 @@ export default function AdminDashboard() {
       {/* ── Locations Tab ── */}
       {tab === 'locations' && (
         <div>
+          <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200 shadow-sm mb-4">
+              <h2 className="font-semibold text-gray-800">Locations ({locations.length})</h2>
+              <button onClick={() => setEditingLoc('new')} className="bg-campus-green text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-green-700 shadow-sm transition-all hover:-translate-y-0.5">
+                + New Location
+              </button>
+          </div>
           <div className="flex gap-2 mb-4">
             <button
-              onClick={() => { setEditingLoc('new'); setPendingLocCoords(null); }}
-              className="bg-campus-blue text-white text-sm px-4 py-2 rounded hover:bg-blue-700"
-            >
-              + Add Location manually
-            </button>
-            <button
               onClick={() => { setTab('map'); setPlacingLocation(true); }}
-              className="border border-campus-blue text-campus-blue text-sm px-4 py-2 rounded hover:bg-blue-50"
+              className="border border-campus-blue text-campus-blue text-sm px-4 py-2 rounded hover:bg-blue-50 transition-colors"
             >
               📍 Pick location on map
             </button>
           </div>
 
-          {editingLoc === 'new' && (
-            <div className="mb-4">
+          {editingLoc && (
+            <div className="bg-white border border-gray-200 p-5 rounded-2xl shadow-md mb-6">
               <LocationForm
+                loc={editingLoc === 'new' ? null : editingLoc}
                 initial={pendingLocCoords ? { ...EMPTY_LOC, lat: pendingLocCoords.lat, lng: pendingLocCoords.lng } : undefined}
                 onSave={handleSaveLocation}
                 onCancel={() => { setEditingLoc(null); setPendingLocCoords(null); }}
+                saving={savingLoc}
               />
             </div>
           )}
 
-          <div className="overflow-x-auto -mx-4 sm:mx-0">
-            <table className="w-full text-sm border-collapse min-w-[500px]">
-              <thead>
-                <tr className="bg-gray-50 border-b">
-                  {['ID','Name','Category','Active',''].map((h) => (
-                    <th key={h} className="text-left px-3 py-2 text-xs font-semibold text-gray-500">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {locations.map((loc) => (
-                  <>
-                    <tr key={loc.id} className="border-b hover:bg-gray-50">
-                      <td className="px-3 py-2 text-gray-400">{loc.id}</td>
-                      <td className="px-3 py-2 font-medium">{loc.name}</td>
-                      <td className="px-3 py-2"><CategoryBadge category={loc.category} /></td>
-                      <td className="px-3 py-2">{loc.is_active ? '✅' : '❌'}</td>
-                      <td className="px-3 py-2">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => setEditingLoc(editingLoc?.id === loc.id ? null : loc)}
-                            className="text-xs text-campus-blue hover:underline"
-                          >
-                            {editingLoc?.id === loc.id ? 'Cancel' : 'Edit'}
-                          </button>
-                          <button
-                            onClick={() => handleDeleteLocation(loc.id)}
-                            className="text-xs text-red-500 hover:underline"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                    {editingLoc?.id === loc.id && (
-                      <tr key={`edit-${loc.id}`}>
-                        <td colSpan={5} className="px-3 pb-3">
-                          <LocationForm
-                            initial={loc}
-                            onSave={handleSaveLocation}
-                            onCancel={() => setEditingLoc(null)}
-                          />
-                        </td>
-                      </tr>
-                    )}
-                  </>
-                ))}
-              </tbody>
-            </table>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {locations.map((l) => (
+              <div key={l.id} className="border border-gray-200 rounded-2xl p-4 flex flex-col bg-white shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold text-gray-900 truncate pr-2">{l.name}</h3>
+                  <CategoryBadge category={l.category} />
+                </div>
+                {l.description && <p className="text-sm text-gray-600 line-clamp-2 mb-3">{l.description}</p>}
+                <div className="mt-auto flex gap-2">
+                  <button onClick={() => setEditingLoc(l)} className="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm py-1.5 rounded-lg transition-colors font-medium">Edit</button>
+                  <button onClick={() => handleDeleteLocation(l.id)} className="flex-1 text-center bg-red-50 hover:bg-red-100 text-red-600 text-sm py-1.5 rounded-lg transition-colors font-medium">Delete</button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -701,26 +671,26 @@ export default function AdminDashboard() {
           {features.length === 0 && <p className="text-gray-400 text-sm">No {featureTab} suggestions.</p>}
           <div className="space-y-4">
             {features.map((f) => (
-              <div key={f.id} className="border rounded p-4 space-y-3">
+              <div key={f.id} className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow space-y-4">
                 <div className="flex justify-between items-start gap-4">
                   <div>
-                    <p className="font-medium text-sm text-gray-900">{f.body}</p>
-                    <p className="text-xs text-gray-400 mt-1">Suggested by {f.user_name || 'Guest'} · {new Date(f.created_at).toLocaleString()}</p>
+                    <p className="font-medium text-gray-900 text-base leading-relaxed">{f.body}</p>
+                    <p className="text-xs text-gray-500 mt-1.5 font-medium">Suggested by {f.user_name || 'Guest'} · {new Date(f.created_at).toLocaleString()}</p>
                   </div>
                   {featureTab !== 'pending' && (
-                    <span className="text-xs font-semibold capitalize px-2 py-1 bg-gray-100 rounded">{f.status}</span>
+                    <span className="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-gray-100 text-gray-600 rounded-full">{f.status}</span>
                   )}
                 </div>
                 {featureTab === 'pending' && (
-                  <div className="flex gap-2 mt-3">
-                    <button onClick={() => handleFeatureReview(f.id, 'planned')} className="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">Mark Planned</button>
-                    <button onClick={() => handleFeatureReview(f.id, 'implemented')} className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">Mark Implemented</button>
-                    <button onClick={() => handleFeatureReview(f.id, 'rejected')} className="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700">Reject</button>
+                  <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-50">
+                    <button onClick={() => handleFeatureReview(f.id, 'planned')} className="px-4 py-2 bg-blue-50 text-blue-700 text-sm font-medium rounded-xl hover:bg-blue-100 transition-colors">Mark Planned</button>
+                    <button onClick={() => handleFeatureReview(f.id, 'implemented')} className="px-4 py-2 bg-green-50 text-green-700 text-sm font-medium rounded-xl hover:bg-green-100 transition-colors">Mark Implemented</button>
+                    <button onClick={() => handleFeatureReview(f.id, 'rejected')} className="px-4 py-2 bg-red-50 text-red-700 text-sm font-medium rounded-xl hover:bg-red-100 transition-colors">Reject</button>
                   </div>
                 )}
                 {featureTab === 'planned' && (
-                  <div className="flex gap-2 mt-3">
-                    <button onClick={() => handleFeatureReview(f.id, 'implemented')} className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">Mark Implemented</button>
+                  <div className="flex gap-2 pt-2 border-t border-gray-50">
+                    <button onClick={() => handleFeatureReview(f.id, 'implemented')} className="px-4 py-2 bg-green-50 text-green-700 text-sm font-medium rounded-xl hover:bg-green-100 transition-colors">Mark Implemented</button>
                   </div>
                 )}
               </div>
@@ -728,6 +698,7 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
