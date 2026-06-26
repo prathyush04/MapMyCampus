@@ -720,21 +720,21 @@ export default function MapPage() {
       {/* Feature Suggestion Modal */}
       {featureModalOpen && (
         <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md space-y-4">
-            <h2 className="font-bold text-lg">💡 Suggest a Feature</h2>
-            <p className="text-sm text-gray-600">Have an idea to improve MapMyCampus? Let the admins know!</p>
+          <div className="bg-slate-900 border border-slate-800 rounded-lg shadow-xl p-6 w-full max-w-md space-y-4">
+            <h2 className="font-bold text-lg text-white">💡 Suggest a Feature</h2>
+            <p className="text-sm text-gray-400">Have an idea to improve MapMyCampus? Let the admins know!</p>
             <form onSubmit={handleFeatureSubmit} className="space-y-3">
               <textarea
                 value={featureBody}
                 onChange={(e) => setFeatureBody(e.target.value)}
                 placeholder="I would love it if..."
                 rows={4}
-                className="w-full border rounded p-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-campus-blue"
+                className="w-full border border-slate-700 bg-slate-800 text-white placeholder-gray-500 rounded p-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-campus-blue"
                 required
               />
               <div className="flex gap-2 justify-end pt-2">
-                <button type="button" onClick={() => setFeatureModalOpen(false)} className="px-4 py-1.5 border rounded text-sm text-gray-600 hover:bg-gray-50">Cancel</button>
-                <button type="submit" disabled={featureSubmitting} className="px-4 py-1.5 bg-campus-blue text-white rounded text-sm hover:bg-blue-700 disabled:opacity-50">Submit</button>
+                <button type="button" onClick={() => setFeatureModalOpen(false)} className="px-4 py-1.5 border border-slate-700 rounded text-sm text-gray-400 hover:bg-slate-800 hover:text-white transition-colors">Cancel</button>
+                <button type="submit" disabled={featureSubmitting} className="px-4 py-1.5 bg-campus-blue text-white rounded text-sm hover:bg-blue-600 disabled:opacity-50">Submit</button>
               </div>
             </form>
           </div>
@@ -743,38 +743,38 @@ export default function MapPage() {
 
       {/* Suggest Location Form */}
       {suggestForm && (
-        <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/40">
-          <form onSubmit={handleSuggestSubmit} className="bg-white rounded-lg shadow-xl p-6 w-80 space-y-3">
-            <h2 className="font-semibold text-base">Suggest a Location</h2>
-            <p className="text-xs text-gray-500">📍 {suggestForm.lat.toFixed(6)}, {suggestForm.lng.toFixed(6)}</p>
+        <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/60">
+          <form onSubmit={handleSuggestSubmit} className="bg-slate-900 border border-slate-800 rounded-lg shadow-xl p-6 w-80 space-y-3">
+            <h2 className="font-semibold text-base text-white">Suggest a Location</h2>
+            <p className="text-xs text-gray-400">📍 {suggestForm.lat.toFixed(6)}, {suggestForm.lng.toFixed(6)}</p>
             {[{k:'name',label:'Name'}].map(({k,label}) => (
               <div key={k}>
-                <label className="block text-xs font-medium mb-0.5">{label}</label>
+                <label className="block text-xs font-medium mb-0.5 text-gray-300">{label}</label>
                 <input type="text" value={suggestForm[k]}
                   onChange={(e) => setSuggestForm((f) => ({ ...f, [k]: e.target.value }))}
-                  className="w-full border rounded px-2 py-1 text-sm" required />
+                  className="w-full border border-slate-700 bg-slate-800 text-white rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-campus-blue" required />
               </div>
             ))}
             <div>
-              <label className="block text-xs font-medium mb-0.5">Category</label>
+              <label className="block text-xs font-medium mb-0.5 text-gray-300">Category</label>
               <select value={suggestForm.category} onChange={(e) => setSuggestForm((f) => ({ ...f, category: e.target.value }))}
-                className="w-full border-gray-300 rounded p-1.5 text-sm border focus:ring-campus-blue">
+                className="w-full border-slate-700 bg-slate-800 text-white rounded p-1.5 text-sm border focus:outline-none focus:ring-2 focus:ring-campus-blue">
                 {CATEGORIES.map((c) => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium mb-0.5">Description</label>
+              <label className="block text-xs font-medium mb-0.5 text-gray-300">Description</label>
               <textarea value={suggestForm.description} onChange={(e) => setSuggestForm((f) => ({ ...f, description: e.target.value }))}
-                rows={2} className="w-full border rounded px-2 py-1 text-sm resize-none" />
+                rows={2} className="w-full border border-slate-700 bg-slate-800 text-white rounded px-2 py-1 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-campus-blue" />
             </div>
             <div className="flex gap-2">
               <button type="submit" disabled={suggestSubmitting}
-                className="flex-1 bg-campus-blue text-white py-1.5 rounded text-sm disabled:opacity-50">
+                className="flex-1 bg-campus-blue text-white py-1.5 rounded text-sm hover:bg-blue-600 disabled:opacity-50 transition-colors">
                 {suggestSubmitting ? 'Submitting…' : 'Submit'}
               </button>
-              <button type="button" onClick={() => { setSuggestForm(null); setSuggestMode(false); }} className="flex-1 border py-1.5 rounded text-sm">Cancel</button>
+              <button type="button" onClick={() => { setSuggestForm(null); setSuggestMode(false); }} className="flex-1 border border-slate-700 text-gray-300 py-1.5 rounded text-sm hover:bg-slate-800 transition-colors">Cancel</button>
             </div>
           </form>
         </div>
