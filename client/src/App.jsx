@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import MapPage from './pages/MapPage';
 import LoginPage from './pages/LoginPage';
@@ -9,6 +9,27 @@ import RegisterPage from './pages/RegisterPage';
 import AdminDashboard from './pages/AdminDashboard';
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
+
+function BrokeAlert() {
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isVisible) return null;
+
+  return (
+    <div className="fixed bottom-6 right-6 z-[9999] bg-yellow-100 text-yellow-800 p-4 rounded-lg shadow-2xl max-w-sm border border-yellow-300">
+      <p className="font-medium text-sm">
+        The locations might take a min to load, I'm a broke ahhh guy, I can't afford the premium plans for hosting :)
+      </p>
+    </div>
+  );
+}
 
 function GlobalShortcuts() {
   const navigate = useNavigate();
@@ -31,6 +52,7 @@ export default function App() {
       <SocketProvider>
         <BrowserRouter>
           <GlobalShortcuts />
+          <BrokeAlert />
           <div className="flex flex-col h-screen">
             <Navbar />
             <div className="flex-1 overflow-hidden">
