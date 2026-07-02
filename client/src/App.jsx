@@ -23,7 +23,7 @@ function BrokeAlert() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] bg-yellow-100 text-yellow-800 p-4 rounded-lg shadow-2xl max-w-sm border border-yellow-300">
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[9999] bg-yellow-100 text-yellow-800 p-4 rounded-lg shadow-2xl max-w-sm border border-yellow-300 text-center w-full mx-4">
       <p className="font-medium text-sm">
         The locations might take a min to load, I'm a broke ahhh guy, I can't afford the premium plans for hosting :)
       </p>
