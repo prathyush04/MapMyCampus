@@ -8,7 +8,7 @@ async function getOrCreateNode(lng, lat, locationId) {
     const dLat = (n.y - lat) * 110540;
     const dLng = (n.x - lng) * 111320 * Math.cos(lat * Math.PI / 180);
     if (Math.hypot(dLat, dLng) <= SNAP_DISTANCE) {
-      // Update existing node with location_id if not set
+      
       if (!n.location_id && locationId) {
         await pool.query('UPDATE graph_nodes SET location_id=$1 WHERE id=$2', [locationId, n.id]);
       }

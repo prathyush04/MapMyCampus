@@ -1,7 +1,7 @@
 const pool = require('../db/pool');
 const { cache } = require('../utils/cache');
 
-const SNAP_DISTANCE = 10; // metres — reuse node if within this distance
+const SNAP_DISTANCE = 10; 
 
 async function invalidateNodeRoutes(nodeId) {
   const stream = cache.scanStream({ match: 'route:*', count: 100 });
@@ -15,9 +15,8 @@ async function invalidateNodeRoutes(nodeId) {
   if (toDelete.length) await cache.del(toDelete);
 }
 
-/** Find an existing node within SNAP_DISTANCE metres, or insert a new one. */
 async function getOrCreateNode(lng, lat) {
-  // Pull all nodes and check distance in JS (graph is small)
+  
   const { rows } = await pool.query('SELECT id, x, y FROM graph_nodes');
   for (const n of rows) {
     const dLat = (n.y - lat) * 110540;

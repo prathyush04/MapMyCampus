@@ -15,11 +15,11 @@ async function auth(req, res, next) {
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
 
-  // Check blacklist
+  
   const blacklisted = await cache.get(keys.jwtBlacklist(payload.jti));
   if (blacklisted) return res.status(401).json({ error: 'Token revoked' });
 
-  req.user = payload; // { id, email, role, jti }
+  req.user = payload; 
   next();
 }
 

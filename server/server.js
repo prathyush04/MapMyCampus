@@ -19,7 +19,7 @@ const io = new Server(server, {
 });
 app.set('io', io);
 
-// ── Middleware ────────────────────────────────────────────────────────────────
+
 app.use(cors({ origin: process.env.CLIENT_ORIGIN, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -27,7 +27,7 @@ app.use(rateLimiter);
 app.use('/uploads', express.static('uploads'));
 app.get('/healthz', (req, res) => res.send('OK'));
 
-// ── Routes ────────────────────────────────────────────────────────────────────
+
 app.use('/api/auth',          require('./routes/auth'));
 app.use('/api/locations',     require('./routes/locations'));
 app.use('/api/graph',         require('./routes/graph'));
@@ -42,19 +42,19 @@ app.use('/api/features', require('./routes/features'));
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use(errorHandler);
 
-// ── Socket.io ─────────────────────────────────────────────────────────────────
+
 const REDIS_CHANNEL = 'socket_events';
 
 io.on('connection', (socket) => {
-  // Client joins location room
+  
   socket.on('join_location', (locationId) => socket.join(`location:${locationId}`));
   socket.on('leave_location', (locationId) => socket.leave(`location:${locationId}`));
 
-  // Authenticated user joins their own notification room
+  
   socket.on('join_user', (userId) => socket.join(`user:${userId}`));
 });
 
-// Redis pub/sub bridge for horizontal scalability
+
 subscriber.subscribe(REDIS_CHANNEL, (err) => {
   if (err) console.error('Redis subscribe error', err);
 });
@@ -64,12 +64,12 @@ subscriber.on('message', (_channel, message) => {
   io.to(room).emit(event, data);
 });
 
-// Helper used by controllers to emit via pub/sub bridge
+
 app.set('emitToRoom', (room, event, data) => {
   publisher.publish(REDIS_CHANNEL, JSON.stringify({ room, event, data }));
 });
 
-// ── Cron: clean expired posts every hour ─────────────────────────────────────
+
 cron.schedule('0 * * * *', async () => {
   try {
     const { rowCount } = await pool.query('DELETE FROM location_posts WHERE expires_at < NOW()');
@@ -79,7 +79,7 @@ cron.schedule('0 * * * *', async () => {
   }
 });
 
-// ── Boot ──────────────────────────────────────────────────────────────────────
+
 const PORT = process.env.PORT || 4000;
 
 (async () => {

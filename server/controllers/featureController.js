@@ -12,7 +12,7 @@ exports.create = async (req, res) => {
 };
 
 exports.list = async (req, res) => {
-  const { status } = req.query; // pending, planned, implemented, rejected
+  const { status } = req.query; 
   let query = `
     SELECT f.*, u.name as user_name 
     FROM feature_suggestions f 

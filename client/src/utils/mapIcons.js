@@ -1,4 +1,4 @@
-// Category → Leaflet marker colour mapping
+
 export const CATEGORY_ICON_COLOR = {
   food:     '#f97316',
   academic: '#3b82f6',
@@ -9,7 +9,7 @@ export const CATEGORY_ICON_COLOR = {
   other:    '#eab308',
 };
 
-// Returns an SVG data URL for a coloured pin marker
+
 export function makeIcon(color = '#3b82f6', selected = false) {
   const size = selected ? 32 : 24;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 36" width="${size}" height="${size * 1.125}">

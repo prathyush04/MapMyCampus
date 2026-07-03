@@ -120,14 +120,14 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
       </div>
 
       <div className="flex-1 overflow-y-auto custom-scrollbar">
-        {/* Buttons */}
+        {}
         <div className="p-4 flex gap-2 border-b border-slate-800 bg-slate-800/50">
           <button onClick={() => onGetDirections(location.id)} className="flex-1 bg-campus-blue text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
             Directions
           </button>
         </div>
         
-        {/* Photos */}
+        {}
         {location.photos?.length > 0 && (
           <div className="flex gap-1 p-2 overflow-x-auto">
             {location.photos.map((p, i) => (
@@ -136,12 +136,12 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
           </div>
         )}
 
-        {/* Description */}
+        {}
         {location.description && (
           <p className="px-4 pt-3 pb-1 text-sm text-gray-600">{location.description}</p>
         )}
 
-        {/* Hours */}
+        {}
         {Object.keys(hours).length > 0 && (
           <div className="px-4 py-2">
             <p className="text-xs font-semibold text-gray-400 uppercase mb-1">Hours</p>
@@ -154,7 +154,7 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
           </div>
         )}
 
-        {/* Live Posts */}
+        {}
         <div className="px-4 py-2 border-t border-slate-800">
           <p className="text-xs font-semibold text-gray-400 uppercase mb-2">Live Updates</p>
           {posts.length === 0 && <p className="text-xs text-gray-500">No updates yet.</p>}
@@ -201,7 +201,7 @@ export default function LocationPanel({ locationId, onClose, onGetDirections }) 
           )}
         </div>
 
-        {/* Reviews */}
+        {}
         {location.category !== 'academic' && location.category !== 'admin' && (
         <div className="px-4 py-2 border-t border-slate-800">
           <p className="text-xs font-semibold text-gray-400 uppercase mb-2">

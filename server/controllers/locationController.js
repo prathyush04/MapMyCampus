@@ -109,7 +109,7 @@ exports.update = async (req, res) => {
 
 exports.remove = async (req, res) => {
   const { id } = req.params;
-  // Unlink graph node but keep it (don't break the graph)
+  
   await pool.query('UPDATE graph_nodes SET location_id=NULL WHERE location_id=$1', [id]);
   await pool.query('DELETE FROM locations WHERE id=$1', [id]);
   res.json({ ok: true });

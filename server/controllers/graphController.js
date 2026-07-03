@@ -12,7 +12,7 @@ async function buildAdjacencyList() {
     if (!adj.has(from_node)) adj.set(from_node, []);
     if (!adj.has(to_node))   adj.set(to_node, []);
     adj.get(from_node).push({ to: to_node, weight: w });
-    adj.get(to_node).push({ to: from_node, weight: w }); // undirected
+    adj.get(to_node).push({ to: from_node, weight: w }); 
   }
   return adj;
 }
@@ -49,7 +49,7 @@ exports.getRoute = async (req, res) => {
   const result = dijkstra(adj, from, to);
   if (!result) return res.status(404).json({ error: 'No path found' });
 
-  // Enrich path with coordinates
+  
   const { rows: nodes } = await pool.query(
     'SELECT id,x,y,location_id FROM graph_nodes WHERE id = ANY($1)',
     [result.path]

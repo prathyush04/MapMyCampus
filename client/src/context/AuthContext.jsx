@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
   const [user, setUser]       = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // On mount, attempt silent token refresh
+  
   useEffect(() => {
     api.post('/api/auth/refresh')
       .then(({ data }) => {
@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
         setLoading(false);
       })
       .catch(() => {
-        // If refresh fails, silently register a guest account
+        
         api.post('/api/auth/guest')
           .then(({ data }) => {
             setAccessToken(data.token);

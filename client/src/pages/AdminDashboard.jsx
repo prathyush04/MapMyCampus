@@ -14,7 +14,7 @@ import { useSocket } from '../context/SocketContext';
 const CENTER = [22.288522625548808, 73.36403846740724];
 const CATEGORIES = ['food','academic','sports','admin','medical','facility','hostel','gates','parking','other'];
 
-// ─── Map editor sub-component ─────────────────────────────────────────────────
+
 function MapEditor({ graph, locations, onNodePlaced, onEdgePlaced, onDeleteEdge, onDeleteNode, placingLocation, onLocationPlaced }) {
   const [edgeStart, setEdgeStart] = useState(null);
   const nodeMap = Object.fromEntries(graph.nodes.map((n) => [n.id, n]));
@@ -39,7 +39,7 @@ function MapEditor({ graph, locations, onNodePlaced, onEdgePlaced, onDeleteEdge,
   const handleNodeClick = (node) => {
     skipMapClick.current = true;
     if (placingLocation) {
-      // Assign location to this existing node
+      
       onLocationPlaced({ lat: node.y, lng: node.x, nodeId: node.id });
       return;
     }
@@ -95,7 +95,7 @@ function MapEditor({ graph, locations, onNodePlaced, onEdgePlaced, onDeleteEdge,
   );
 }
 
-// ─── Location form ────────────────────────────────────────────────────────────
+
 const EMPTY_LOC = { name: '', slug: '', description: '', category: 'other', lat: '', lng: '', is_active: true };
 
 function LocationForm({ initial, onSave, onCancel }) {
@@ -146,7 +146,7 @@ function LocationForm({ initial, onSave, onCancel }) {
   );
 }
 
-// ─── Shortcut Card ──────────────────────────────────────────────────────
+
 function ShortcutCard({ shortcut: s, status, onReview, graphNodes }) {
   const [edits, setEdits] = useState({
     from_lat: s.from_lat, from_lng: s.from_lng,
@@ -207,14 +207,14 @@ function ShortcutCard({ shortcut: s, status, onReview, graphNodes }) {
           </p>
           <MapContainer center={center} zoom={17} style={{ height: '200px', width: '100%' }} scrollWheelZoom={false}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            {/* Existing graph nodes */}
+            {}
             {graphNodes.map((n) => (
               <CircleMarker key={n.id} center={[n.y, n.x]} radius={4}
                 pathOptions={{ color: '#7c3aed', fillOpacity: 0.7 }}>
                 <Tooltip>{n.id}</Tooltip>
               </CircleMarker>
             ))}
-            {/* Temporary shortcut endpoints */}
+            {}
             <CircleMarker center={[edits.from_lat, edits.from_lng]} radius={8}
               pathOptions={{ color: '#22c55e', fillOpacity: 1 }}>
               <Tooltip permanent>Start (pending)</Tooltip>
@@ -265,7 +265,7 @@ function ShortcutCard({ shortcut: s, status, onReview, graphNodes }) {
   );
 }
 
-// ─── Location Request Card ───────────────────────────────────────────────────
+
 function LocationRequestCard({ request: r, status, onReview, graphNodes }) {
   const [edits, setEdits] = useState({
     name: r.name, slug: r.slug || '', description: r.description || '', category: r.category,
@@ -332,14 +332,14 @@ function LocationRequestCard({ request: r, status, onReview, graphNodes }) {
         </p>
         <MapContainer center={[r.lat, r.lng]} zoom={17} style={{ height: '200px', width: '100%' }} scrollWheelZoom={false}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {/* Existing graph nodes */}
+          {}
           {graphNodes.map((n) => (
             <CircleMarker key={n.id} center={[n.y, n.x]} radius={4}
               pathOptions={{ color: '#7c3aed', fillOpacity: 0.7 }}>
               <Tooltip>{n.id}</Tooltip>
             </CircleMarker>
           ))}
-          {/* Pending location as temporary node */}
+          {}
           <CircleMarker center={[r.lat, r.lng]} radius={10}
             pathOptions={{ color: '#3b82f6', fillOpacity: 0.5, dashArray: '4 3' }}>
             <Tooltip permanent>{r.name} (pending)</Tooltip>
@@ -383,7 +383,7 @@ function LocationRequestCard({ request: r, status, onReview, graphNodes }) {
   );
 }
 
-// ─── Main Dashboard ───────────────────────────────────────────────────────────
+
 export default function AdminDashboard() {
   const socket = useSocket();
   const navigate = useNavigate();
@@ -406,7 +406,7 @@ export default function AdminDashboard() {
   const [features, setFeatures]                 = useState([]);
   const [featureTab, setFeatureTab]             = useState('pending');
 
-  // Load graph whenever we need request cards (to show existing nodes)
+  
   useEffect(() => {
     getGraph().then(({ data }) => setGraph(data)).catch(() => {});
   }, []);
@@ -432,7 +432,7 @@ export default function AdminDashboard() {
   const handleShortcutReview = async (id, status, edits) => {
     await reviewShortcut(id, status, edits);
     setShortcuts((prev) => prev.filter((s) => s.id !== id));
-    // Refresh graph nodes after approval so snap logic is up to date
+    
     if (status === 'approved') getGraph().then(({ data }) => setGraph(data)).catch(() => {});
   };
 
@@ -517,7 +517,7 @@ export default function AdminDashboard() {
           </button>
         </div>
         
-        {/* Modern Pill Tabs */}
+        {}
         <div className="flex gap-2 mb-8 overflow-x-auto pb-2 custom-scrollbar">
           {TABS.map((t) => (
             <button
@@ -532,7 +532,7 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-      {/* ── Shortcuts Tab ── */}
+      {}
       {tab === 'shortcuts' && (
         <div>
           <div className="flex gap-2 mb-4">
@@ -552,7 +552,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* ── Locations Tab ── */}
+      {}
       {tab === 'locations' && (
         <div>
           <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-200 shadow-sm mb-4">
@@ -600,7 +600,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* ── Map Editor Tab ── */}
+      {}
       {tab === 'map' && (
         <div>
           {placingLocation ? (
@@ -637,7 +637,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* ── Location Requests Tab ── */}
+      {}
       {tab === 'requests' && (
         <div>
           <div className="flex gap-2 mb-4">
@@ -657,7 +657,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* ── Features Tab ── */}
+      {}
       {tab === 'features' && (
         <div>
           <div className="flex gap-2 mb-4 overflow-x-auto">

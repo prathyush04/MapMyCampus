@@ -1,6 +1,6 @@
 const { cache, keys } = require('../utils/cache');
 
-// Sliding window rate limiter — 500 req / 15 min per IP
+
 const WINDOW_SECONDS = 15 * 60;
 const MAX_REQUESTS   = 500;
 

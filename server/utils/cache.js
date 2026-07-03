@@ -6,7 +6,7 @@ const publisher  = new Redis(process.env.REDIS_URL, opts);
 const subscriber = new Redis(process.env.REDIS_URL, opts);
 const cache      = new Redis(process.env.REDIS_URL, opts);
 
-// Wait for all three clients to be ready
+
 async function connect() {
   await Promise.all([publisher, subscriber, cache].map(
     (client) => new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ async function connect() {
   ));
 }
 
-// Key helpers
+
 const keys = {
   refreshSession : (userId)         => `session:refresh:${userId}`,
   routeCache     : (from, to)       => `route:${from}:${to}`,

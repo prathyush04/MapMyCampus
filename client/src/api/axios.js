@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Access token stored in module memory (not localStorage)
+
 let _accessToken = null;
 
 export const setAccessToken = (t) => { _accessToken = t; };

@@ -10,7 +10,7 @@ import { CATEGORY_ICON_COLOR, makeIcon } from '../utils/mapIcons';
 
 const CENTER = [22.288522625548808, 73.36403846740724];
 const NEARBY_THRESHOLD_M = 30;
-const STEP_ARRIVAL_M = 15; // metres to consider a waypoint reached
+const STEP_ARRIVAL_M = 15; 
 const CATEGORIES = ['food', 'academic', 'sports', 'admin', 'medical', 'facility', 'hostel', 'gates', 'parking', 'other'];
 
 function bearing(from, to) {
@@ -125,12 +125,12 @@ export default function MapPage() {
     getMyShortcuts().then(({ data }) => setPendingShortcuts(data.filter((s) => s.status === 'pending'))).catch(() => {});
   }, [user]);
 
-  // Handle navigation from bookmarks — state: { openLocationId }
+  
   useEffect(() => {
     if (routerLocation.state?.openLocationId) {
       const id = routerLocation.state.openLocationId;
       setSelectedLocation(id);
-      // fly once locations are loaded
+      
     }
   }, [routerLocation.state]);
 
@@ -195,14 +195,14 @@ export default function MapPage() {
       let finalCoordinates = data.coordinates;
       let extraDist = 0;
       if (routeFrom === 'user' && userPos && finalCoordinates.length > 0) {
-        // Visually connect the user's exact GPS location to the start of the graph
+        
         finalCoordinates = [{ x: userPos[1], y: userPos[0] }, ...finalCoordinates];
         extraDist = L.latLng(userPos[0], userPos[1]).distanceTo(L.latLng(data.coordinates[0].y, data.coordinates[0].x));
       }
 
       setRoutePath(finalCoordinates);
       const dist = (data.totalDistance || data.distance || 0) + extraDist;
-      setRouteInfo({ distance: dist, minutes: Math.ceil(dist / 80) }); // ~80 m/min walking
+      setRouteInfo({ distance: dist, minutes: Math.ceil(dist / 80) }); 
       setSidebarOpen(false);
       if (finalCoordinates?.length) {
         const lats = finalCoordinates.map((n) => n.y);
@@ -220,7 +220,7 @@ export default function MapPage() {
   const handleMapClick = useCallback((e) => {
     const { lat, lng } = e.latlng;
 
-    // Close sidebar on mobile whenever map is clicked
+    
     setSidebarOpen(false);
 
     if (shortcutMode) {
@@ -307,14 +307,14 @@ export default function MapPage() {
         setGeoError(null);
         setJourneyActive(true);
         setJourneyStep(0);
-        // Watch position for live tracking
+        
         watchIdRef.current = navigator.geolocation.watchPosition(
           (p) => {
             const lat = p.coords.latitude;
             const lng = p.coords.longitude;
             setUserPos([lat, lng]);
             setFlyTo([lat, lng]);
-            // Advance step if close enough to current waypoint
+            
             setJourneyStep((step) => {
               if (!routePath || step >= routePath.length - 1) return step;
               const wp = routePath[step];
@@ -333,7 +333,7 @@ export default function MapPage() {
     );
   }, [routePath]);
 
-  // Clean up watch on unmount
+  
   useEffect(() => () => { if (watchIdRef.current !== null) navigator.geolocation.clearWatch(watchIdRef.current); }, []);
 
   const nodeMap = Object.fromEntries(graph.nodes.map((n) => [n.id, n]));
@@ -342,7 +342,7 @@ export default function MapPage() {
 
   return (
     <div className="flex h-full relative bg-slate-950 text-gray-100">
-      {/* Mobile sidebar toggle */}
+      {}
       <button
         onClick={() => setSidebarOpen((o) => !o)}
         className="sm:hidden absolute top-2 left-2 z-[1000] bg-slate-900 border border-slate-700 rounded-full w-9 h-9 flex items-center justify-center shadow text-lg text-gray-100"
@@ -350,7 +350,7 @@ export default function MapPage() {
         {sidebarOpen ? '✕' : '☰'}
       </button>
 
-      {/* Sidebar */}
+      {}
       <aside className={`
         ${ sidebarOpen ? 'translate-x-0 shadow-soft' : '-translate-x-full' }
         sm:translate-x-0 sm:relative sm:flex sm:shadow-soft
@@ -376,7 +376,7 @@ export default function MapPage() {
           </div>
         </div>
 
-        {/* Routing panel */}
+        {}
         <div className="p-3 border-b border-slate-800 space-y-2">
           <p className="text-xs font-semibold text-gray-400 uppercase">Get Directions</p>
           <select value={routeFrom || ''} onChange={(e) => setRouteFrom(e.target.value || null)}
@@ -437,7 +437,7 @@ export default function MapPage() {
         </div>
       </aside>
 
-      {/* Mobile search bar */}
+      {}
       {!sidebarOpen && (
         <div className="sm:hidden absolute top-2 left-12 right-2 z-[1000]">
           <input
@@ -451,7 +451,7 @@ export default function MapPage() {
         </div>
       )}
 
-      {/* Map */}
+      {}
       <div className="flex-1 relative">
         <button
           onClick={() => setFeatureModalOpen(true)}
@@ -512,7 +512,7 @@ export default function MapPage() {
             </Marker>
           ))}
 
-          {/* Ghost: pending location requests */}
+          {}
           {pendingLocReqs.map((r) => (
             <CircleMarker key={`plr-${r.id}`} center={[r.lat, r.lng]} radius={10}
               pathOptions={{ color: '#f59e0b', fillColor: '#fef3c7', fillOpacity: 0.7, dashArray: '4 3' }}>
@@ -520,7 +520,7 @@ export default function MapPage() {
             </CircleMarker>
           ))}
 
-          {/* Ghost: pending shortcut requests */}
+          {}
           {pendingShortcuts.map((s) => s.from_lat && (
             <>
               <CircleMarker key={`psc-f-${s.id}`} center={[s.from_lat, s.from_lng]} radius={7}
@@ -553,7 +553,7 @@ export default function MapPage() {
         </MapContainer>
       </div>
 
-      {/* Route info bottom sheet */}
+      {}
       {routeInfo && !journeyActive && (
         <div className="absolute bottom-0 left-0 right-0 z-[1000] sm:left-72 bg-white border-t shadow-lg px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-6">
@@ -585,7 +585,7 @@ export default function MapPage() {
         </div>
       )}
 
-      {/* Active journey HUD */}
+      {}
       {journeyActive && routePath && (
         <div className="absolute bottom-0 left-0 right-0 z-[1000] sm:left-72 bg-gray-900 text-white px-5 py-4">
           {journeyStep >= routePath.length - 1 ? (
@@ -621,7 +621,7 @@ export default function MapPage() {
         </div>
       )}
 
-      {/* Geo error modal */}
+      {}
       {geoError && (
         <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-80 space-y-3">
@@ -646,7 +646,7 @@ export default function MapPage() {
         </div>
       )}
 
-      {/* Mobile floating cancel bar — shown when a mode is active */}
+      {}
       {(suggestMode || shortcutMode) && (
         <div className="sm:hidden absolute bottom-6 left-1/2 -translate-x-1/2 z-[1000] flex items-center gap-3 bg-white border rounded-full shadow-lg px-5 py-2.5 text-sm">
           <span className="text-gray-700">
@@ -664,13 +664,13 @@ export default function MapPage() {
         </div>
       )}
 
-      {/* Location Drawer */}
+      {}
       {selectedLocation && (
         <LocationPanel locationId={selectedLocation} onClose={() => setSelectedLocation(null)}
           onGetDirections={(id) => { setRouteTo(id); }} />
       )}
 
-      {/* Shortcut form when 2 nodes picked */}
+      {}
       {shortcutMode && shortcutPins.length === 2 && (
         <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/40">
           <form onSubmit={handleShortcutSubmit} className="bg-white rounded-lg shadow-xl p-6 w-80 space-y-3">
@@ -696,7 +696,7 @@ export default function MapPage() {
         </div>
       )}
 
-      {/* Already exists popup */}
+      {}
       {nearbyLoc && (
         <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-lg shadow-xl p-6 w-80 space-y-3">
@@ -717,7 +717,7 @@ export default function MapPage() {
         </div>
       )}
 
-      {/* Feature Suggestion Modal */}
+      {}
       {featureModalOpen && (
         <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/50 p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-lg shadow-xl p-6 w-full max-w-md space-y-4">
@@ -741,7 +741,7 @@ export default function MapPage() {
         </div>
       )}
 
-      {/* Suggest Location Form */}
+      {}
       {suggestForm && (
         <div className="absolute inset-0 z-[2000] flex items-center justify-center bg-black/60">
           <form onSubmit={handleSuggestSubmit} className="bg-slate-900 border border-slate-800 rounded-lg shadow-xl p-6 w-80 space-y-3">

@@ -19,7 +19,7 @@ export default function Navbar() {
       <div className="flex items-center px-4 h-12 gap-4">
         <Link to="/" className="font-bold text-lg tracking-tight">🗺 MapMyCampus</Link>
         <div className="flex-1" />
-        {/* Desktop links */}
+        {}
         <div className="hidden sm:flex items-center gap-4">
           {(!user || user.email?.startsWith('guest_')) ? (
             <Link to="/login" className="text-xs text-blue-100 hover:text-white bg-white/10 hover:bg-slate-700 px-3 py-1.5 rounded-full transition-all flex items-center gap-1">
@@ -34,8 +34,8 @@ export default function Navbar() {
             </>
           )}
         </div>
-        {/* Mobile: hamburger + notifications for non-guests */}
-        {/* Mobile: hamburger + notifications */}
+        {}
+        {}
         <div className="flex sm:hidden items-center gap-3">
           {user && !user.email?.startsWith('guest_') && <NotificationsDropdown />}
           <button onClick={() => setMenuOpen((o) => !o)} className="text-white text-xl leading-none">

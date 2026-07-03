@@ -1,5 +1,5 @@
-// Central error handler — must be registered last in Express
-function errorHandler(err, req, res, next) { // eslint-disable-line no-unused-vars
+
+function errorHandler(err, req, res, next) { 
   console.error(err);
   const status = err.status || err.statusCode || 500;
   const message = err.message || 'Internal Server Error';

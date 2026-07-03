@@ -1,4 +1,4 @@
-// Binary min-heap keyed on priority (distance)
+
 class MinHeap {
   constructor() { this.heap = []; }
 
@@ -42,12 +42,6 @@ class MinHeap {
   }
 }
 
-/**
- * @param {Map<number, {to: number, weight: number}[]>} adjList
- * @param {number} source
- * @param {number} target
- * @returns {{ path: number[], totalDistance: number } | null}
- */
 function dijkstra(adjList, source, target) {
   const dist = new Map();
   const prev = new Map();
@@ -73,7 +67,7 @@ function dijkstra(adjList, source, target) {
 
   if (!dist.has(target)) return null;
 
-  // Reconstruct path
+  
   const path = [];
   let cur = target;
   while (cur !== undefined) {
