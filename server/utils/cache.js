@@ -1,6 +1,6 @@
 const Redis = require('ioredis');
 
-const opts = { maxRetriesPerRequest: 3 };
+const opts = { maxRetriesPerRequest: 3, family: 4, tls: { rejectUnauthorized: false } };
 
 const publisher  = new Redis(process.env.REDIS_URL, opts);
 const subscriber = new Redis(process.env.REDIS_URL, opts);
