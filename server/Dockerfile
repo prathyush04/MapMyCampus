@@ -5,4 +5,4 @@ RUN npm ci --omit=dev
 COPY . .
 RUN mkdir -p uploads
 EXPOSE 4000
-CMD ["node", "server.js"]
+CMD ["node", "-r", "newrelic", "server.js"]
