@@ -19,3 +19,8 @@ body {
 .leaflet-tooltip-bottom:before { border-bottom-color: #334155 !important; }
 .leaflet-tooltip-left:before { border-left-color: #334155 !important; }
 .leaflet-tooltip-right:before { border-right-color: #334155 !important; }
+
+/* Dark filter applied only to tile images — markers are in a separate pane and unaffected */
+.map-tiles-dark img {
+  filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(85%) saturate(60%);
+}
