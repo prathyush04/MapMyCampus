@@ -53,6 +53,7 @@ exports.register = async (req, res) => {
     'INSERT INTO users(email,password_hash,name) VALUES($1,$2,$3) RETURNING id,email,name,role',
     [email.toLowerCase(), hash, name]
   );
+  
   const user = rows[0];
   const { access, refresh } = makeTokens(user);
   await cache.set(keys.refreshSession(user.id), refresh, 'EX', REFRESH_EXPIRY_S);

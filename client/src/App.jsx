@@ -11,6 +11,7 @@ import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function BrokeAlert() {
+  
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
